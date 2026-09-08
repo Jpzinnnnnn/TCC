@@ -1,0 +1,691 @@
+$azul: #758e9d;
+$azul-texto: #617f94;
+$texto: #263122;
+$muted: #7c8b99;
+$borda: #e0e7ef;
+$fundo: #f4f7fa;
+
+:host {
+  display: block;
+  color: $texto;
+  font-size: 14px;
+}
+
+.container {
+  width: min( calc(100% - 64px), 1090px);
+  margin-inline: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 3px solid #426985;
+  outline-offset: 5px;
+}
+
+.cabecalho {
+
+  border-bottom: 1px solid $borda;
+  background: #fff;
+
+  &__conteudo {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    a {
+      color: $muted;
+      font-size: 12px;
+
+      &:hover,
+      &.ativo {
+        color: #315a7d;
+      }
+
+      &.ativo {
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  img {
+    width: 67px;
+    height: 48px;
+    object-fit: cover;
+  }
+
+  span {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  strong {
+    color: $azul-texto;
+    font-size: 14px;
+    font-weight: 750;
+  }
+
+  small {
+    color: $muted;
+    font-size: 8px;
+    letter-spacing: 0.2px;
+  }
+}
+
+.botao-admin {
+  padding: 7px 15px;
+  border-radius: 6px;
+  background: $azul;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+
+  &:hover {
+    background: #607c8c;
+  }
+}
+
+.apresentacao {
+  padding-block: 34px;
+
+  &__conteudo {
+    display: grid;
+    grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 75px;
+  }
+
+  &__foto {
+    display: block;
+    width: 100%;
+    height: 408px;
+    border-radius: 22px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  h1 {
+    margin: 8px 0 10px;
+    font-size: clamp(30px, 3.4vw, 42px);
+    font-weight: 850;
+    line-height: 1.12;
+    letter-spacing: -1px;
+  }
+
+  .descricao {
+    margin: 0;
+    color: $muted;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+}
+
+.etiqueta {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #e7eff5;
+  color: $azul-texto;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.diferenciais {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-block: 22px;
+}
+
+.diferencial {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .icone {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    background: #e7eff5;
+    color: $azul-texto;
+    font-size: 21px;
+  }
+
+  strong,
+  small {
+    display: block;
+    white-space: nowrap;
+  }
+
+  strong {
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  small {
+    margin-top: 2px;
+    color: $muted;
+    font-size: 9px;
+  }
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.botao {
+  min-height: 39px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 16px;
+  border: 1px solid $azul;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 650;
+  transition: background 150ms ease;
+
+  span {
+    font-size: 17px;
+    line-height: 1;
+  }
+
+  &--principal {
+    background: $azul;
+    color: #fff;
+
+    &:hover {
+      background: #607c8c;
+    }
+  }
+
+  &--contorno {
+    background: #fff;
+    color: $azul-texto;
+
+    &:hover {
+      background: #edf3f7;
+    }
+  }
+}
+
+.sobre {
+  border-top: 1px solid $borda;
+  border-bottom: 1px solid $borda;
+
+  &__conteudo {
+    min-height: 134px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-block: 24px;
+  }
+
+  &__icone {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #e7eff5;
+    font-size: 27px;
+  }
+
+  h2 {
+    margin: 0 0 4px;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+  }
+
+  p {
+    margin: 0;
+    color: $muted;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+
+.informacoes {
+  padding-block: 54px;
+  background: $fundo;
+
+  &__grade {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 32px;
+  }
+}
+
+.painel {
+  min-width: 0;
+  padding: 28px;
+  border: 1px solid $borda;
+  border-radius: 18px;
+  background: #fff;
+  scroll-margin-top: 24px;
+
+  &__cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.35px;
+    }
+
+    a {
+      flex-shrink: 0;
+      color: $azul-texto;
+      font-size: 10px;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.refeicoes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.refeicao {
+  min-height: 140px;
+  padding: 13px 10px;
+  border: 1px solid $borda;
+  border-radius: 9px;
+  background: #f0f3f6;
+
+  h3 {
+    margin: 0 0 9px;
+    color: $azul-texto;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 12px;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  li::marker {
+    font-size: 8px;
+  }
+}
+
+.nota-alimentacao {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 17px;
+  padding: 13px;
+  border-radius: 8px;
+  background: #e7eff5;
+
+  p {
+    margin: 0;
+    color: $azul-texto;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.55;
+  }
+}
+
+.avisos__lista {
+  display: grid;
+  gap: 10px;
+}
+
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 71px;
+  padding: 12px;
+  border: 1px solid $borda;
+  border-radius: 9px;
+  transition: background 150ms ease;
+
+  &:hover {
+    background: #f5f8fb;
+  }
+
+  &__icone {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #e7eff5;
+    font-size: 17px;
+  }
+
+  &__texto {
+    flex: 1;
+    min-width: 0;
+  }
+
+  h3 {
+    margin: 0 0 3px;
+    font-size: 12px;
+    font-weight: 750;
+  }
+
+  &__data {
+    display: block;
+    color: $azul-texto;
+    font-size: 10px;
+  }
+
+  p {
+    margin: 2px 0 0;
+    color: $muted;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  &__seta {
+    margin-left: auto;
+    color: $azul-texto;
+    font-size: 22px;
+  }
+}
+
+.rodape {
+  padding: 42px 0 48px;
+  background: $azul;
+  color: #e2e9ee;
+
+  &__grade {
+    display: grid;
+    grid-template-columns: 2.3fr 1fr 1.45fr;
+    gap: 36px;
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    color: white;
+    font-size: 14px;
+    font-weight: 750;
+  }
+
+  h3 {
+    margin: 0 0 9px;
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0 0 5px;
+    font-size: 10px;
+    line-height: 1.6;
+  }
+
+  &__email {
+    overflow-wrap: anywhere;
+  }
+
+  &__base {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 25px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+    p,
+    a {
+      margin: 0;
+      color: #d0dce3;
+      font-size: 9px;
+    }
+
+    div {
+      display: flex;
+      gap: 18px;
+    }
+
+    a:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 1000px) {
+  .apresentacao__conteudo {
+    gap: 32px;
+  }
+
+  .diferenciais {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .painel {
+    padding: 20px;
+
+    &__cabecalho {
+      flex-wrap: wrap;
+    }
+  }
+
+  .informacoes__grade {
+    gap: 20px;
+  }
+
+  .refeicoes {
+    grid-template-columns: 1fr;
+  }
+
+  .refeicao {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    width: calc(100% - 36px);
+  }
+
+  .cabecalho {
+    &__conteudo {
+      flex-wrap: wrap;
+      gap: 18px;
+      padding-block: 15px;
+    }
+
+    nav {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+      gap: 26px;
+    }
+  }
+
+  .marca {
+    img {
+      width: 48px;
+      height: 38px;
+    }
+
+    strong {
+      font-size: 11px;
+    }
+
+    small {
+      font-size: 7px;
+    }
+  }
+
+  .apresentacao {
+    padding-block: 30px;
+
+    &__conteudo {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+
+    &__foto {
+      height: 320px;
+      border-radius: 18px;
+    }
+
+    h1 {
+      font-size: 34px;
+    }
+  }
+
+  .diferenciais {
+    gap: 18px;
+  }
+
+  .acoes {
+    gap: 10px;
+  }
+
+  .botao {
+    flex: 1;
+    padding-inline: 10px;
+    white-space: nowrap;
+    font-size: 11px;
+  }
+
+  .sobre {
+    h2 {
+      font-size: 19px;
+    }
+
+    &__icone {
+      width: 46px;
+      height: 46px;
+      font-size: 23px;
+    }
+  }
+
+  .informacoes {
+    padding-block: 30px;
+
+    &__grade {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .refeicoes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .refeicao {
+    padding: 10px 8px;
+
+    h3 {
+      font-size: 11px;
+    }
+
+    ul {
+      font-size: 10px;
+    }
+  }
+
+  .rodape {
+    padding-block: 30px;
+
+    &__grade {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    &__base {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+
+  .quebra-desktop {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .refeicoes {
+    grid-template-columns: 1fr;
+  }
+
+  .acoes {
+    flex-direction: column;
+  }
+
+  .marca strong {
+    font-size: 10px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  font-family: "Segoe UI", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

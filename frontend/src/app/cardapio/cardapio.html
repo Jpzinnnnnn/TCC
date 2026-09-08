@@ -1,0 +1,206 @@
+<header class="cabecalho">
+    <div class="container cabecalho__conteudo">
+      <a class="marca" routerLink="/home">
+        <img src="/escola.jpg" alt="Fachada da escola" />
+  
+        <span>
+          <strong>E.E. MONSENHOR BICUDO</strong>
+          <small>ESCOLA PÚBLICA ESTADUAL</small>
+        </span>
+      </a>
+  
+      <nav aria-label="Menu principal">
+        <a routerLink="/home">Início</a>
+        <a routerLink="/cardapio" class="ativo" aria-current="page">
+          Cardápio
+        </a>
+        <a routerLink="/home" fragment="avisos">Avisos</a>
+        <a routerLink="/home" fragment="sobre">Sobre Nós</a>
+      </nav>
+  
+      <a class="admin" routerLink="/admin">Admin</a>
+    </div>
+  </header>
+  
+  <main>
+    <section class="container semana" aria-label="Cardápio semanal">
+      <div class="seletor">
+        <button
+          class="seta"
+          type="button"
+          aria-label="Dia anterior"
+          [disabled]="diaSelecionado === 0"
+          (click)="mudarDia(-1)"
+        >
+          ‹
+        </button>
+  
+        <div class="dias" role="group" aria-label="Selecione o dia da semana">
+          @for (dia of dias; track dia.data; let i = $index) {
+            <button
+              class="dia"
+              type="button"
+              [class.selecionado]="diaSelecionado === i"
+              [attr.aria-pressed]="diaSelecionado === i"
+              (click)="selecionarDia(i)"
+            >
+              <span>{{ dia.nome }}</span>
+              <strong>{{ dia.data }}</strong>
+            </button>
+          }
+        </div>
+  
+        <button
+          class="seta"
+          type="button"
+          aria-label="Próximo dia"
+          [disabled]="diaSelecionado === dias.length - 1"
+          (click)="mudarDia(1)"
+        >
+          ›
+        </button>
+      </div>
+  
+      <div class="data-selecionada" aria-live="polite">
+        <h1>
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.7"
+          >
+            <rect x="3" y="5" width="18" height="16" rx="2" />
+            <path d="M16 3v4M8 3v4M3 11h18M8 15h2M14 15h2" />
+          </svg>
+  
+          {{ diaAtual.titulo }}
+        </h1>
+  
+        <p>
+          Confira o cardápio preparado para hoje com muito carinho e equilíbrio
+          nutricional.
+        </p>
+      </div>
+  
+      <div class="aviso-nutricionista">
+        <span class="aviso-nutricionista__icone" aria-hidden="true">ⓘ</span>
+  
+        <div>
+          <h2>Cardápio elaborado por nutricionista</h2>
+          <p>O cardápio pode ter mudanças conforme o dia.</p>
+        </div>
+      </div>
+  
+      <aside class="banner">
+        <div class="banner__principal">
+          <span class="banner__icone" aria-hidden="true">🎓</span>
+  
+          <div>
+            <h2>Alimente seu corpo, construa seu futuro!</h2>
+            <p>Venha fazer parte da E.E. Monsenhor Bicudo.</p>
+          </div>
+        </div>
+  
+        <div class="banner__convite">
+          <strong>Faça parte do E.E. Monsenhor Bicudo!</strong>
+          <p>Aqui, educação e cuidado caminham juntos para transformar vidas.</p>
+        </div>
+      </aside>
+    </section>
+  
+    <section
+      class="refeicoes"
+      aria-label="Refeições do dia selecionado"
+      aria-live="polite"
+    >
+      @for (refeicao of diaAtual.refeicoes; track refeicao.titulo) {
+        <article class="refeicao">
+          <header class="refeicao__cabecalho">
+            <span class="refeicao__icone" aria-hidden="true">
+              @if (refeicao.titulo === 'Almoço') {
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M4 3v6a3 3 0 0 0 6 0V3M7 3v18M18 3v18" />
+                  <path d="M18 3c-4 2-4 8 0 9" />
+                </svg>
+              } @else {
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M4 8h12v8a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z" />
+                  <path d="M16 9h2a3 3 0 0 1 0 6h-2M7 3v2M11 2v3M15 3v2" />
+                </svg>
+              }
+            </span>
+  
+            <div>
+              <h2>{{ refeicao.titulo }}</h2>
+              <p>{{ refeicao.horario }}</p>
+            </div>
+          </header>
+  
+          <ul>
+            @for (alimento of refeicao.alimentos; track alimento) {
+              <li>{{ alimento }}</li>
+            }
+          </ul>
+  
+          <div class="refeicao__mensagem">
+            <span aria-hidden="true">♥</span>
+            <p>{{ refeicao.mensagem }}</p>
+          </div>
+        </article>
+      }
+    </section>
+  </main>
+  
+  <footer class="rodape">
+    <div class="container">
+      <div class="rodape__grade">
+        <div>
+          <h2>E.E. Monsenhor Bicudo</h2>
+          <p class="rodape__descricao">
+            Comprometidos em oferecer ensino público de alta qualidade para
+            a formação integral e cidadã dos jovens da nossa comunidade.
+          </p>
+        </div>
+  
+        <div>
+          <h3>Contato</h3>
+          <p>☎ (14) 3433-1610</p>
+          <p>✉ monsenhorbicudo&#64;educacao.sp.gov.br</p>
+        </div>
+  
+        <div>
+          <h3>Endereço</h3>
+          <p>
+            Av. Rio Branco, 803 - Sen. Salgado Filho,<br />
+            Marília - SP, 17509-013
+          </p>
+        </div>
+      </div>
+  
+      <div class="rodape__base">
+        <p>
+          © 2026 E.E. Monsenhor Bicudo. Secretaria da Educação - São Paulo.
+        </p>
+  
+        <div>
+          <a href="/privacidade">Portal de Privacidade</a>
+          <a href="/termos">Termos de Uso</a>
+        </div>
+      </div>
+    </div>
+  </footer>
