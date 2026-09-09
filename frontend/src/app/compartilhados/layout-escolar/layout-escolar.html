@@ -1,0 +1,72 @@
+<header class="cabecalho">
+    <div class="container cabecalho__conteudo">
+      <a class="marca" routerLink="/home">
+        <img
+          src="https://i.ibb.co/KzS2Wzd7/inicio.jpg"
+          alt="Fachada da escola"
+        />
+  
+        <span>
+          <strong>E.E. MONSENHOR BICUDO</strong>
+          <small>ESCOLA PÚBLICA ESTADUAL</small>
+        </span>
+      </a>
+  
+      <nav aria-label="Menu principal">
+        <a routerLink="/home" routerLinkActive="ativo">
+          Início
+        </a>
+      
+        <a routerLink="/cardapio" routerLinkActive="ativo">
+          Cardápio
+        </a>
+      
+        <a routerLink="/avisos" routerLinkActive="ativo">
+          Avisos
+        </a>
+      
+        <a routerLink="/home" fragment="sobre">
+          Sobre nós
+        </a>
+      </nav>
+  
+      <a class="admin" routerLink="/admin">Admin</a>
+    </div>
+  </header>
+  
+  <main>
+    <ng-content></ng-content>
+  </main>
+  
+  <footer class="rodape">
+    <div class="container">
+      <div class="rodape__grade">
+        <div>
+          <h2>E.E. Monsenhor Bicudo</h2>
+          <p class="descricao">
+            Comprometidos em oferecer ensino público de alta qualidade para
+            a formação integral e cidadã dos jovens da nossa comunidade.
+          </p>
+        </div>
+  
+        <div>
+          <h3>Contato</h3>
+          <p>☎ (14) 3433-1610</p>
+          <p>✉ monsenhorbicudo&#64;educacao.sp.gov.br</p>
+        </div>
+  
+        <div>
+          <h3>Endereço</h3>
+          <p>
+            Av. Rio Branco, 803 - Sen. Salgado Filho,<br />
+            Marília - SP, 17509-013
+          </p>
+        </div>
+      </div>
+  
+      <div class="rodape__base">
+        <p>© 2026 E.E. Monsenhor Bicudo. Todos os direitos reservados.</p>
+        <p>Desenvolvido para fins educacionais e comunitários.</p>
+      </div>
+    </div>
+  </footer>

@@ -1,0 +1,311 @@
+@use '../portal';
+
+.banner {
+  height: 155px;
+  background:
+    linear-gradient(#192a3333, #192a3355),
+    url('https://i.ibb.co/KzS2Wzd7/inicio.jpg') center 48% / cover;
+
+  &__conteudo {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    height: 100%;
+    padding-bottom: 18px;
+
+    span {
+      padding: 10px 14px;
+      border-radius: 5px;
+      background: white;
+      color: #36536d;
+      font-size: 11px;
+      font-weight: 700;
+    }
+  }
+}
+
+.conteudo {
+  padding-block: 34px 66px;
+}
+
+h1 {
+  margin: 0 0 15px;
+  font-size: 18px;
+}
+
+.ferramentas {
+  display: flex;
+  gap: 12px;
+  margin-block: 26px;
+
+  select {
+    min-height: 37px;
+    padding: 8px 12px;
+    border: 1px solid #e0e7f0;
+    border-radius: 7px;
+    background: white;
+    color: #63758b;
+    font-size: 12px;
+  }
+}
+
+.busca {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 9px;
+  padding-inline: 12px;
+  border: 1px solid #e0e7f0;
+  border-radius: 7px;
+  background: white;
+  color: #7c96af;
+
+  span {
+    font-size: 24px;
+  }
+
+  input {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 0;
+    border: 0;
+    background: transparent;
+    color: #172238;
+    font-size: 12px;
+
+    &::placeholder {
+      color: #94a4b6;
+    }
+  }
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: minmax(0, 2.45fr) minmax(0, 1fr);
+  gap: 26px;
+}
+
+.lista {
+  display: grid;
+  gap: 20px;
+}
+
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  min-height: 112px;
+  padding: 22px 18px;
+  border: 1px solid #e0e7f0;
+  border-radius: 14px;
+  background: white;
+  color: #172238;
+  text-align: left;
+
+  &:hover {
+    border-color: #9eb4c5;
+    box-shadow: 0 5px 18px #315a7d08;
+  }
+
+  &__icone {
+    display: grid;
+    place-items: center;
+    flex: 0 0 47px;
+    height: 47px;
+    border-radius: 12px;
+    font-size: 26px;
+  }
+
+  &__texto {
+    display: grid;
+    flex: 1;
+    min-width: 0;
+    gap: 8px;
+
+    > strong {
+      font-size: 14px;
+    }
+
+    > span:not(.etiqueta) {
+      color: #75849a;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  }
+
+  &__data {
+    display: grid;
+    flex-shrink: 0;
+    gap: 4px;
+    min-width: 55px;
+    text-align: center;
+
+    strong {
+      font-size: 21px;
+      white-space: nowrap;
+    }
+
+    small {
+      color: #7b8ba0;
+      font-size: 9px;
+    }
+  }
+
+  &__seta {
+    display: grid;
+    place-items: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #f6f8fb;
+    color: #71899d;
+    font-size: 21px;
+  }
+}
+
+.proximos {
+  h2 {
+    margin: 0 0 14px;
+    font-size: 13px;
+  }
+}
+
+.mini-evento {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-block: 13px;
+  border-bottom: 1px solid #e8edf3;
+
+  &:hover strong {
+    color: #315a7d;
+  }
+
+  .data-evento {
+    width: 42px;
+    min-height: 50px;
+
+    strong {
+      font-size: 17px;
+    }
+  }
+
+  > span:last-child {
+    display: grid;
+    gap: 4px;
+  }
+
+  strong {
+    font-size: 12px;
+  }
+
+  small {
+    color: #8494a6;
+    font-size: 10px;
+  }
+}
+
+.botao-calendario {
+  display: block;
+  margin-top: 16px;
+  padding: 10px;
+  border-radius: 22px;
+  background: #d1dbe1;
+  color: #325875;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+
+  &:hover {
+    background: #c2d0d9;
+  }
+}
+
+.convite {
+  margin-top: 20px;
+  padding: 22px;
+  border-radius: 14px;
+  background: #758e9d;
+  color: white;
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 15px;
+  }
+
+  p {
+    margin: 0;
+    color: #e0e8ed;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  > span {
+    display: block;
+    margin-top: 22px;
+    color: #e1f2e9;
+    font-size: 27px;
+    text-align: center;
+  }
+}
+
+.vazio button {
+  padding: 9px 16px;
+  border: 0;
+  border-radius: 7px;
+  background: #758e9d;
+  color: white;
+}
+
+@media (max-width: 800px) {
+  .grade {
+    grid-template-columns: 1fr;
+  }
+
+  .ferramentas {
+    flex-wrap: wrap;
+  }
+
+  .busca {
+    flex-basis: 100%;
+  }
+
+  .ferramentas select {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .aviso {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+
+    &__icone {
+      flex-basis: 36px;
+      height: 36px;
+      font-size: 22px;
+    }
+
+    &__texto {
+      flex-basis: calc(100% - 50px);
+    }
+
+    &__data {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 48px;
+
+      strong {
+        font-size: 16px;
+      }
+    }
+
+    &__seta {
+      margin-left: auto;
+    }
+  }
+}

@@ -1,0 +1,160 @@
+<app-layout-escolar>
+    <div class="container conteudo">
+      <header class="titulo">
+        <h1>Calendário de Eventos</h1>
+        <p>Acompanhe todos os eventos, reuniões e datas importantes da escola.</p>
+      </header>
+  
+      <div class="grade">
+        <section aria-label="Calendário mensal">
+          <div class="painel navegacao">
+            <h2 aria-live="polite">▣ {{ tituloMes }}</h2>
+  
+            <div>
+              <button
+                type="button"
+                aria-label="Mês anterior"
+                (click)="mudarMes(-1)"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                aria-label="Próximo mês"
+                (click)="mudarMes(1)"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+  
+          <div class="painel calendario">
+            <div class="semana">
+              @for (nome of semana; track nome) {
+                <span>{{ nome }}</span>
+              }
+            </div>
+  
+            <div class="dias">
+              @for (dia of dias; track dia.chave) {
+                <button
+                  class="dia"
+                  type="button"
+                  [class.fora]="!dia.pertenceAoMes"
+                  [class.selecionado]="diaSelecionado === dia.chave"
+                  [attr.aria-pressed]="diaSelecionado === dia.chave"
+                  [attr.aria-label]="
+                    dataCompleta(dia.chave) + ', ' +
+                    dia.eventos.length + ' evento(s)'
+                  "
+                  (click)="selecionarDia(dia)"
+                >
+                  <strong>{{ dia.numero }}</strong>
+  
+                  <span class="dia__eventos">
+                    @for (evento of dia.eventos; track evento.id) {
+                      <span class="dia__evento" [title]="evento.titulo">
+                        <span aria-hidden="true">●</span>
+                        {{ evento.titulo }}
+                      </span>
+                    }
+                  </span>
+                </button>
+              }
+            </div>
+          </div>
+        </section>
+  
+        <aside>
+          <section class="painel categorias">
+            <h2>Categorias</h2>
+  
+            <div class="filtros" role="group" aria-label="Categorias de eventos">
+              @for (item of categorias; track item) {
+                <button
+                  type="button"
+                  [class.ativo]="categoria === item"
+                  [attr.aria-pressed]="categoria === item"
+                  (click)="categoria = item"
+                >
+                  {{ item }}
+                </button>
+              }
+            </div>
+          </section>
+  
+          <section class="eventos" aria-labelledby="titulo-eventos">
+            <h2 class="titulo-secao" id="titulo-eventos">
+              {{ diaSelecionado ? 'Eventos do Dia' : 'Eventos do Mês' }}
+            </h2>
+  
+            @if (diaSelecionado) {
+              <div class="selecao">
+                <span>{{ dataCompleta(diaSelecionado) }}</span>
+                <button type="button" (click)="diaSelecionado = ''">
+                  Ver mês inteiro
+                </button>
+              </div>
+            }
+  
+            <div class="lista" aria-live="polite">
+              @for (evento of eventosVisiveis; track evento.id) {
+                <button
+                  class="evento"
+                  type="button"
+                  (click)="abrirEvento(evento, detalhes)"
+                >
+                  <span class="data-evento">
+                    <strong>{{ dia(evento.data) }}</strong>
+                    <small>{{ mesCurto(evento.data) }}</small>
+                  </span>
+  
+                  <span class="evento__texto">
+                    <strong>{{ evento.titulo }}</strong>
+                    <small>◷ {{ evento.horario }}</small>
+                    <small>⌖ {{ evento.local }}</small>
+                    <span [class]="'etiqueta ' + evento.cor">
+                      {{ evento.categoria }}
+                    </span>
+                  </span>
+  
+                  <span aria-hidden="true">›</span>
+                </button>
+              } @empty {
+                <p class="vazio">
+                  Nenhum evento para o período e a categoria selecionados.
+                </p>
+              }
+            </div>
+          </section>
+        </aside>
+      </div>
+    </div>
+  
+    <dialog #detalhes class="modal" aria-labelledby="titulo-detalhes-evento">
+      <button
+        class="modal__fechar"
+        type="button"
+        aria-label="Fechar detalhes"
+        (click)="detalhes.close()"
+      >
+        ×
+      </button>
+  
+      @if (eventoSelecionado; as evento) {
+        <span [class]="'etiqueta ' + evento.cor">
+          {{ evento.categoria }}
+        </span>
+  
+        <h2 id="titulo-detalhes-evento">{{ evento.titulo }}</h2>
+  
+        <p>
+          <strong>Data:</strong> {{ dataCompleta(evento.data) }}<br />
+          <strong>Horário:</strong> {{ evento.horario }}<br />
+          <strong>Local:</strong> {{ evento.local }}
+        </p>
+  
+        <p>{{ evento.descricao }}</p>
+      }
+    </dialog>
+  </app-layout-escolar>

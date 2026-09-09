@@ -1,0 +1,166 @@
+<app-layout-escolar>
+    <section class="banner" aria-label="Comunicados da escola">
+      <div class="container banner__conteudo">
+        <span>ⓘ Comunicados oficiais</span>
+      </div>
+    </section>
+  
+    <div class="container conteudo">
+      <section aria-labelledby="titulo-categorias">
+        <h1 id="titulo-categorias">Categorias</h1>
+  
+        <div class="filtros" role="group" aria-label="Categorias de avisos">
+          @for (item of categorias; track item) {
+            <button
+              type="button"
+              [class.ativo]="categoria === item"
+              [attr.aria-pressed]="categoria === item"
+              (click)="categoria = item"
+            >
+              {{ item }}
+            </button>
+          }
+        </div>
+      </section>
+  
+      <div class="ferramentas">
+        <label class="busca">
+          <span aria-hidden="true">⌕</span>
+          <input
+            type="search"
+            placeholder="Buscar avisos..."
+            aria-label="Buscar avisos"
+            [(ngModel)]="pesquisa"
+          />
+        </label>
+  
+        <select aria-label="Filtrar por mês do aviso" [(ngModel)]="mes">
+          <option value="">Filtrar por data</option>
+  
+          @for (item of meses; track item) {
+            <option [value]="item">{{ nomeMes(item) }}</option>
+          }
+        </select>
+  
+        <select aria-label="Ordenar avisos" [(ngModel)]="ordem">
+          <option value="recentes">Mais recentes</option>
+          <option value="antigos">Mais antigos</option>
+          <option value="data">Data do aviso</option>
+        </select>
+      </div>
+  
+      <div class="grade">
+        <section aria-labelledby="titulo-avisos">
+          <h2 class="titulo-secao" id="titulo-avisos">Avisos Importantes</h2>
+  
+          <div class="lista" aria-live="polite">
+            @for (aviso of avisosFiltrados; track aviso.id) {
+              <button
+                class="aviso"
+                type="button"
+                (click)="abrirAviso(aviso, detalhes)"
+              >
+                <span [class]="'aviso__icone ' + aviso.cor" aria-hidden="true">
+                  {{ aviso.icone }}
+                </span>
+  
+                <span class="aviso__texto">
+                  <strong>{{ aviso.titulo }}</strong>
+                  <span>{{ aviso.resumo }}</span>
+                  <span [class]="'etiqueta ' + aviso.cor">
+                    {{ aviso.etiqueta }}
+                  </span>
+                </span>
+  
+                <span class="aviso__data">
+                  <strong>
+                    {{ dia(aviso.data) }}
+                    @if (aviso.fim) {
+                      a {{ dia(aviso.fim) }}
+                    }
+                  </strong>
+                  <small>{{ mesCurto(aviso.data) }}</small>
+  
+                  @if (!aviso.fim && aviso.id <= 2) {
+                    <small>{{ aviso.horario }}</small>
+                  }
+                </span>
+  
+                <span class="aviso__seta" aria-hidden="true">›</span>
+              </button>
+            } @empty {
+              <div class="vazio">
+                <p>Nenhum aviso encontrado com esses filtros.</p>
+                <button type="button" (click)="limparFiltros()">
+                  Limpar filtros
+                </button>
+              </div>
+            }
+          </div>
+        </section>
+  
+        <aside>
+          <section class="painel proximos">
+            <h2>♧ Próximos Eventos</h2>
+  
+            @for (evento of proximosEventos; track evento.id) {
+              <a
+                class="mini-evento"
+                routerLink="/calendario"
+                [queryParams]="{ data: evento.data, evento: evento.id }"
+              >
+                <span class="data-evento">
+                  <strong>{{ dia(evento.data) }}</strong>
+                  <small>{{ mesCurto(evento.data) }}</small>
+                </span>
+  
+                <span>
+                  <strong>{{ evento.titulo }}</strong>
+                  <small>{{ evento.horario }}</small>
+                  <small>{{ evento.local }}</small>
+                </span>
+              </a>
+            }
+  
+            <a class="botao-calendario" routerLink="/calendario">
+              ▣ Ver calendário completo
+            </a>
+          </section>
+  
+          <section class="convite">
+            <h2>Participe da vida escolar do seu filho!</h2>
+            <p>Acompanhe, participe e faça parte dessa jornada de sucesso.</p>
+            <span aria-hidden="true">♙♙♙</span>
+          </section>
+        </aside>
+      </div>
+    </div>
+  
+    <dialog #detalhes class="modal" aria-labelledby="titulo-detalhes-aviso">
+      <button
+        class="modal__fechar"
+        type="button"
+        aria-label="Fechar detalhes"
+        (click)="detalhes.close()"
+      >
+        ×
+      </button>
+  
+      @if (avisoSelecionado; as aviso) {
+        <span [class]="'etiqueta ' + aviso.cor">{{ aviso.etiqueta }}</span>
+        <h2 id="titulo-detalhes-aviso">{{ aviso.titulo }}</h2>
+  
+        <p>
+          <strong>Data:</strong> {{ dataCompleta(aviso.data) }}
+          @if (aviso.fim) {
+            até {{ dataCompleta(aviso.fim) }}
+          }
+          <br />
+          <strong>Horário:</strong> {{ aviso.horario }}
+        </p>
+  
+        <p>{{ aviso.resumo }}</p>
+        <p>{{ aviso.detalhes }}</p>
+      }
+    </dialog>
+  </app-layout-escolar>
