@@ -1,0 +1,187 @@
+<app-layout-escolar>
+    <section class="historia" aria-labelledby="titulo-historia">
+      <div class="historia__conteudo">
+        <div class="historia__texto">
+          <span class="etiqueta">SOBRE NÓS</span>
+  
+          <h1 id="titulo-historia">Conheça Nossa História</h1>
+  
+          <p>
+            Mais do que uma escola — somos uma comunidade que transforma
+            vidas através da educação, da tecnologia e do compromisso com
+            o futuro.
+          </p>
+  
+          <div class="numeros" aria-label="Nossa escola em números">
+            <div class="numero">
+              <span class="numero__icone" aria-hidden="true">♙</span>
+  
+              <div>
+                <strong>+500</strong>
+                <small>ALUNOS FORMADOS</small>
+              </div>
+            </div>
+  
+            <div class="numero">
+              <span class="numero__icone" aria-hidden="true">♧</span>
+  
+              <div>
+                <strong>20+</strong>
+                <small>PROFESSORES</small>
+              </div>
+            </div>
+  
+            <div class="numero">
+              <span class="numero__icone" aria-hidden="true">♥</span>
+  
+              <div>
+                <strong>100%</strong>
+                <small>DEDICAÇÃO</small>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <img
+          class="historia__foto"
+          src="https://i.ibb.co/KzS2Wzd7/inicio.jpg"
+          alt="Pátio da escola com árvores e espaço de convivência"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+  
+    <section class="identidade" aria-label="Missão, visão e valores">
+      <div class="container identidade__grade">
+        <article class="cartao-identidade">
+          <div class="cartao-identidade__titulo">
+            <span aria-hidden="true">◉</span>
+            <h2>Nossa Missão</h2>
+          </div>
+  
+          <p>
+            Oferecer uma educação de excelência que desenvolva
+            conhecimentos, valores e habilidades, preparando nossos
+            alunos para a vida e para o mundo do trabalho.
+          </p>
+        </article>
+  
+        <article class="cartao-identidade">
+          <div class="cartao-identidade__titulo">
+            <span aria-hidden="true">◈</span>
+            <h2>Nossa Visão</h2>
+          </div>
+  
+          <p>
+            Ser referência em educação pública de qualidade,
+            reconhecida pela formação de cidadãos conscientes,
+            criativos e inovadores.
+          </p>
+        </article>
+  
+        <article class="cartao-identidade">
+          <div class="cartao-identidade__titulo">
+            <span aria-hidden="true">⚑</span>
+            <h2>Nossos Valores</h2>
+          </div>
+  
+          <ul>
+            @for (valor of valores; track valor) {
+              <li>{{ valor }}</li>
+            }
+          </ul>
+        </article>
+      </div>
+    </section>
+  
+    <section class="curso" aria-labelledby="titulo-curso">
+      <div class="container">
+        <div class="curso__apresentacao">
+          <div>
+            <span class="etiqueta">FORMAÇÃO TÉCNICA</span>
+  
+            <h2 id="titulo-curso">
+              Curso Técnico em Desenvolvimento de Sistemas
+            </h2>
+  
+            <p>
+              Nosso curso técnico conecta os alunos aos principais
+              conhecimentos do mercado, combinando teoria e prática para
+              formar profissionais preparados para atuar na área de TI.
+              Com a duração de 2 anos, os estudantes aprendem desde lógica
+              de programação até o desenvolvimento completo de sistemas
+              web e mobile.
+            </p>
+          </div>
+  
+          <img
+            src="/curso-tecnico.jpg"
+            alt="Estudantes desenvolvendo atividades no laboratório de informática"
+            loading="lazy"
+          />
+        </div>
+  
+        <section class="grade-curricular" aria-labelledby="titulo-segunda">
+          <h3 id="titulo-segunda">Grade Curricular da 2ª série</h3>
+  
+          <div class="disciplinas">
+            @for (disciplina of segundaSerie; track disciplina.titulo) {
+              <article class="disciplina">
+                <h4>{{ disciplina.titulo }}</h4>
+                <p>{{ disciplina.descricao }}</p>
+              </article>
+            }
+          </div>
+        </section>
+  
+        <section class="grade-curricular" aria-labelledby="titulo-terceira">
+          <h3 id="titulo-terceira">Grade Curricular da 3ª série</h3>
+  
+          <div class="disciplinas">
+            @for (disciplina of terceiraSerie; track disciplina.titulo) {
+              <article class="disciplina">
+                <h4>{{ disciplina.titulo }}</h4>
+                <p>{{ disciplina.descricao }}</p>
+              </article>
+            }
+          </div>
+        </section>
+  
+        <section class="diferenciais" aria-labelledby="titulo-diferenciais">
+          <h3 id="titulo-diferenciais">Diferenciais do Nosso Ensino Técnico</h3>
+  
+          <div class="diferenciais__grade">
+            @for (item of diferenciais; track item.titulo) {
+              <article class="diferencial">
+                <span class="diferencial__icone" aria-hidden="true">
+                  {{ item.icone }}
+                </span>
+  
+                <h4>{{ item.titulo }}</h4>
+                <p>{{ item.descricao }}</p>
+              </article>
+            }
+          </div>
+        </section>
+      </div>
+    </section>
+  
+    <section class="tecnologias" aria-labelledby="titulo-tecnologias">
+      <div class="container">
+        <div class="tecnologias__cartao">
+          <h2 id="titulo-tecnologias">
+            Tecnologias utilizadas no desenvolvimento
+          </h2>
+  
+          <ul>
+            @for (tecnologia of tecnologias; track tecnologia) {
+              <li>
+                <span aria-hidden="true"></span>
+                {{ tecnologia }}
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+  </app-layout-escolar>

@@ -1,0 +1,194 @@
+<header class="cabecalho-login">
+    <a class="marca" routerLink="/home" aria-label="Ir para a página inicial">
+      <img
+        src="https://i.ibb.co/KzS2Wzd7/inicio.jpg"
+        alt="Fachada da escola"
+      />
+  
+      <span>
+        <strong>E.E. MONSENHOR BICUDO</strong>
+        <small>ESCOLA PÚBLICA ESTADUAL</small>
+      </span>
+    </a>
+  </header>
+  
+  <a class="voltar" routerLink="/home">
+    <span class="voltar__icone" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m14 6-6 6 6 6" />
+      </svg>
+    </span>
+  
+    Voltar
+  </a>
+  
+  <main class="login">
+    <section class="apresentacao" aria-labelledby="titulo-apresentacao">
+      <span class="etiqueta">Portal do Aluno e Responsáveis</span>
+  
+      <h1 id="titulo-apresentacao">
+        Alimentação<br />
+        saudável,<br />
+        aprendizado<br />
+        constante.
+      </h1>
+  
+      <p class="apresentacao__descricao">
+        Acompanhe o cardápio escolar diário, comunicados de nutrição
+        e notícias importantes do Monsenhor Bicudo em tempo real.
+      </p>
+  
+      <aside class="dica">
+        <span aria-hidden="true">💡</span>
+  
+        <p>
+          Uma alimentação equilibrada contribui para a concentração
+          e o aprendizado. Nossos pratos são planejados com carinho!
+        </p>
+      </aside>
+    </section>
+  
+    <section class="cartao-login" aria-labelledby="titulo-login">
+      <h2 id="titulo-login">Fazer Login</h2>
+  
+      <p class="cartao-login__descricao">
+        Insira suas credenciais para acessar o painel administrativo
+        ou informativo.
+      </p>
+  
+      <form
+        #formulario="ngForm"
+        (ngSubmit)="entrar(formulario)"
+        novalidate
+      >
+        <div class="campo">
+          <label for="email">Endereço de E-mail</label>
+  
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="exemplo@escola.com"
+            autocomplete="username"
+            inputmode="email"
+            autocapitalize="none"
+            spellcheck="false"
+            required
+            email
+            [(ngModel)]="email"
+            #campoEmail="ngModel"
+            [class.invalido]="
+              campoEmail.invalid &&
+              (campoEmail.touched || formulario.submitted)
+            "
+            [attr.aria-invalid]="
+              campoEmail.invalid &&
+              (campoEmail.touched || formulario.submitted)
+            "
+            [attr.aria-describedby]="
+              campoEmail.invalid &&
+              (campoEmail.touched || formulario.submitted)
+                ? 'erro-email'
+                : null
+            "
+          />
+  
+          @if (
+            campoEmail.invalid &&
+            (campoEmail.touched || formulario.submitted)
+          ) {
+            <small class="erro" id="erro-email">
+              @if (campoEmail.errors?.['required']) {
+                Informe seu e-mail.
+              } @else {
+                Informe um e-mail válido.
+              }
+            </small>
+          }
+        </div>
+  
+        <div class="campo">
+          <label for="senha">Senha</label>
+  
+          <div class="campo-senha">
+            <input
+                id="senha"
+                name="senha"
+                [type]="mostrarSenha ? 'text' : 'password'"
+                placeholder="Sua senha secreta"
+                autocomplete="current-password"
+                required
+                [(ngModel)]="senha"
+                #campoSenha="ngModel"
+                [class.invalido]="
+                  campoSenha.invalid &&
+                  (campoSenha.touched || formulario.submitted)
+                "
+                [attr.aria-invalid]="
+                  campoSenha.invalid &&
+                  (campoSenha.touched || formulario.submitted)
+                "
+                [attr.aria-describedby]="
+                  campoSenha.invalid &&
+                  (campoSenha.touched || formulario.submitted)
+                    ? 'erro-senha'
+                    : null
+                "
+            />
+  
+            <button
+              class="mostrar-senha"
+              type="button"
+              aria-label="Mostrar senha"
+              [attr.aria-pressed]="mostrarSenha"
+              aria-controls="senha"
+              (click)="alternarSenha()"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+                <circle cx="12" cy="12" r="3" />
+  
+                @if (mostrarSenha) {
+                  <path d="m3 3 18 18" />
+                }
+              </svg>
+            </button>
+          </div>
+  
+          @if (
+            campoSenha.invalid &&
+            (campoSenha.touched || formulario.submitted)
+          ) {
+            <small class="erro" id="erro-senha">
+              Informe sua senha.
+            </small>
+          }
+        </div>
+  
+        <button class="entrar" type="submit">
+          Entrar no Painel
+        </button>
+  
+        @if (mensagem) {
+          <p class="mensagem" role="status">
+            {{ mensagem }}
+          </p>
+        }
+      </form>
+    </section>
+  </main>
