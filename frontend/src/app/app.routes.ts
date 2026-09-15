@@ -7,12 +7,36 @@ import { Calendario } from './calendario/calendario';
 import { Sobre } from './sobre/sobre';
 import { Login } from './login/login';
 
+import { InicioAdmin } from './admin/inicio-admin/inicio-admin';
+import { adminGuard } from './admin.guard';
+
+import { CardapioAdmin } from './admin/cardapio-admin/cardapio-admin';
+import { AvisosAdmin } from './admin/avisos-admin/avisos-admin';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+
   { path: 'home', component: Home },
   { path: 'cardapio', component: Cardapio },
   { path: 'avisos', component: Avisos },
   { path: 'calendario', component: Calendario },
   { path: 'sobre', component: Sobre },
-  { path: 'admin', component: Login },
+
+  { path: 'admin', component: Login, pathMatch: 'full' },
+
+  {
+    path: 'admin/inicio',
+    component: InicioAdmin,
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'admin/cardapio',
+    component: CardapioAdmin,
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'admin/avisos',
+    component: AvisosAdmin,
+    canActivate: [adminGuard],
+  },
 ];

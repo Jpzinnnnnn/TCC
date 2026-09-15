@@ -1,0 +1,444 @@
+$azul: #758e9d;
+$azul-texto: #6d879b;
+$texto: #263122;
+$secundario: #7b8b9b;
+$borda: #e0e7ef;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #fff;
+  color: $texto;
+}
+
+.container {
+  width: min(calc(100% - 64px), 1100px);
+  margin-inline: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+a,
+button {
+  &:focus-visible {
+    outline: 3px solid #315a7d;
+    outline-offset: 4px;
+  }
+}
+
+.cabecalho {
+  border-bottom: 1px solid $borda;
+
+  &__conteudo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 80px;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    a {
+      color: #526477;
+      font-size: 12px;
+
+      &:hover {
+        color: #285879;
+      }
+
+      &.ativo {
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  img {
+    display: block;
+    width: 68px;
+    height: 48px;
+    object-fit: cover;
+  }
+
+  > span {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  strong {
+    color: $azul-texto;
+    font-size: 14px;
+    font-weight: 750;
+  }
+
+  small {
+    color: $secundario;
+    font-size: 8px;
+  }
+}
+
+.botao-sair {
+  padding: 6px 15px;
+  border: 0;
+  border-radius: 6px;
+  background: $azul;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+
+  &:hover {
+    background: #607d8e;
+  }
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.apresentacao {
+  padding-block: 41px;
+
+  &__conteudo {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 48px;
+  }
+
+  h1 {
+    margin: 9px 0;
+    font-size: clamp(29px, 3.2vw, 38px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+  }
+
+  p {
+    margin: 0;
+    color: $secundario;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  &__foto {
+    display: block;
+    width: 100%;
+    height: 225px;
+    border-radius: 19px;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+.etiqueta {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #e7eff5;
+  color: $azul-texto;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.destaques {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 21px;
+}
+
+.destaque {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &__icone {
+    display: grid;
+    place-items: center;
+    width: 33px;
+    height: 33px;
+    border-radius: 50%;
+    background: #e7eff5;
+    color: $azul-texto;
+
+    svg {
+      width: 22px;
+      height: 22px;
+    }
+  }
+
+  strong,
+  small {
+    display: block;
+  }
+
+  strong {
+    font-size: 11px;
+    font-weight: 650;
+  }
+
+  small {
+    margin-top: 2px;
+    color: $secundario;
+    font-size: 10px;
+  }
+}
+
+.gerenciar {
+  flex: 1;
+  padding-block: 15px 40px;
+  border-top: 1px solid $borda;
+  background: #f4f7fa;
+
+  &__lista {
+    display: grid;
+    gap: 21px;
+  }
+}
+
+.cartao {
+  padding: 26px;
+  border: 1px solid $borda;
+  border-radius: 17px;
+  background: #fff;
+
+  &__titulo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  &__icone {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #e7eff5;
+    font-size: 21px;
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 750;
+    letter-spacing: -0.3px;
+  }
+
+  p {
+    margin: 17px 0;
+    color: $secundario;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 35px;
+  padding: 9px 20px;
+  border: 0;
+  border-radius: 5px;
+  background: $azul;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 650;
+
+  &:hover {
+    background: #607d8e;
+  }
+}
+
+.rodape {
+  padding: 40px 0 28px;
+  background: $azul;
+  color: #dce5eb;
+
+  &__grade {
+    display: grid;
+    grid-template-columns: 2.2fr 0.9fr 1.4fr;
+    gap: 40px;
+  }
+
+  h2,
+  h3 {
+    margin: 0 0 9px;
+    color: white;
+  }
+
+  h2 {
+    font-size: 14px;
+  }
+
+  h3 {
+    font-size: 10px;
+  }
+
+  p {
+    margin: 0 0 5px;
+    font-size: 10px;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+
+  &__descricao {
+    max-width: 365px;
+  }
+
+  &__base {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #ffffff20;
+
+    p {
+      margin: 0;
+      font-size: 8px;
+    }
+  }
+
+  &__links {
+    display: flex;
+    gap: 18px;
+
+    button {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #dce5eb;
+      font-size: 8px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.modal {
+  width: min(450px, calc(100% - 32px));
+  padding: 28px;
+  border: 1px solid $borda;
+  border-radius: 16px;
+  color: $texto;
+
+  &::backdrop {
+    background: #17223880;
+  }
+
+  h2 {
+    margin-top: 0;
+    font-size: 22px;
+  }
+
+  p {
+    color: $secundario;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 850px) {
+  .apresentacao__conteudo {
+    gap: 25px;
+  }
+
+  .rodape__grade {
+    gap: 22px;
+  }
+}
+
+@media (max-width: 700px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+
+  .cabecalho {
+    &__conteudo {
+      flex-wrap: wrap;
+      gap: 18px;
+      padding-block: 14px;
+    }
+
+    nav {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+      gap: 24px;
+    }
+  }
+
+  .marca {
+    img {
+      width: 47px;
+      height: 36px;
+    }
+
+    strong {
+      font-size: 10px;
+    }
+
+    small {
+      font-size: 7px;
+    }
+  }
+
+  .apresentacao {
+    padding-block: 30px;
+
+    &__conteudo {
+      grid-template-columns: 1fr;
+    }
+
+    &__foto {
+      height: 220px;
+    }
+  }
+
+  .cartao {
+    padding: 20px;
+
+    h2 {
+      font-size: 17px;
+    }
+  }
+
+  .rodape {
+    &__grade {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    &__base {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+  }
+}

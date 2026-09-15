@@ -1,0 +1,368 @@
+<header class="cabecalho">
+    <div class="container cabecalho__conteudo">
+      <a class="marca" routerLink="/admin/inicio">
+        <img
+          src="https://i.ibb.co/KzS2Wzd7/inicio.jpg"
+          alt="Fachada da escola"
+        />
+  
+        <span>
+          <strong>E.E. MONSENHOR BICUDO</strong>
+          <small>ESCOLA PÚBLICA ESTADUAL</small>
+        </span>
+      </a>
+  
+      <nav aria-label="Menu administrativo">
+        <a routerLink="/admin/inicio">Início</a>
+        <a routerLink="/admin/cardapio">Cardápio</a>
+        <a routerLink="/admin/avisos" class="ativo" aria-current="page">
+          Avisos
+        </a>
+        <a routerLink="/sobre">Sobre Nós</a>
+      </nav>
+  
+      <button class="sair" type="button" (click)="sair()">Sair</button>
+    </div>
+  </header>
+  
+  <main class="container conteudo">
+    <header class="titulo">
+      <h1>Gerenciar Avisos</h1>
+      <p>Crie e gerencie os avisos e comunicados da escola</p>
+    </header>
+  
+    <label class="pesquisa">
+      <span aria-hidden="true">⌕</span>
+      <input
+        type="search"
+        placeholder="Buscar avisos por título..."
+        aria-label="Buscar avisos por título"
+        [(ngModel)]="pesquisa"
+        (ngModelChange)="pesquisar()"
+      />
+    </label>
+  
+    <div class="grade">
+      <section class="painel formulario">
+        <h2 class="titulo-secao">
+          {{ editandoId !== null ? 'Editar Aviso' : 'Criar Novo Aviso' }}
+        </h2>
+  
+        <form #form="ngForm" (ngSubmit)="publicar(form)" novalidate>
+          <div class="campo">
+            <label for="titulo-aviso">Título do Aviso</label>
+            <input
+              #tituloInput
+              id="titulo-aviso"
+              name="titulo"
+              type="text"
+              placeholder="Ex: Entrega de Boletins Bimestrais"
+              required
+              maxlength="150"
+              [(ngModel)]="formulario.titulo"
+            />
+          </div>
+  
+          <div class="campo">
+            <label for="categoria-aviso">Categoria</label>
+            <select
+              id="categoria-aviso"
+              name="categoria"
+              required
+              [(ngModel)]="formulario.categoria"
+            >
+              @for (categoria of categorias; track categoria.valor) {
+                <option [value]="categoria.valor">
+                  {{ categoria.nome }}
+                </option>
+              }
+            </select>
+          </div>
+  
+          <div class="campo">
+            <label for="descricao-aviso">Descrição</label>
+            <textarea
+              id="descricao-aviso"
+              name="descricao"
+              rows="5"
+              placeholder="Insira o texto detalhado que será exibido no comunicado para alunos, pais e responsáveis..."
+              required
+              maxlength="5000"
+              [(ngModel)]="formulario.descricao"
+            ></textarea>
+          </div>
+  
+          <div class="horarios">
+            <div class="campo">
+              <label for="data-aviso">Data do Evento</label>
+              <input
+                id="data-aviso"
+                name="data"
+                type="date"
+                required
+                [(ngModel)]="formulario.data"
+              />
+            </div>
+  
+            <div class="campo">
+              <label for="inicio-aviso">Horário Começo</label>
+              <input
+                id="inicio-aviso"
+                name="inicio"
+                type="time"
+                [required]="!formulario.diaInteiro"
+                [disabled]="formulario.diaInteiro"
+                [(ngModel)]="formulario.inicio"
+              />
+            </div>
+  
+            <div class="campo">
+              <label for="termino-aviso">Horário Final</label>
+              <input
+                id="termino-aviso"
+                name="termino"
+                type="time"
+                [disabled]="formulario.diaInteiro"
+                [(ngModel)]="formulario.termino"
+              />
+            </div>
+          </div>
+  
+          <label class="alternativa">
+            <span>
+              <strong>Evento de Dia Inteiro</strong>
+              <small>Oculta o horário no card do aviso</small>
+            </span>
+  
+            <input
+              class="switch"
+              type="checkbox"
+              role="switch"
+              name="diaInteiro"
+              [(ngModel)]="formulario.diaInteiro"
+            />
+          </label>
+  
+          <label class="alternativa">
+            <span>
+              <strong>Marcar como Importante</strong>
+              <small>Destaca o aviso na lista pública de avisos</small>
+            </span>
+  
+            <input
+              class="switch"
+              type="checkbox"
+              role="switch"
+              name="importante"
+              [(ngModel)]="formulario.importante"
+            />
+          </label>
+  
+          @if (fimOriginal) {
+            <p class="observacao">
+              Este aviso mantém sua data final:
+              {{ formatarData(fimOriginal) }}.
+            </p>
+          }
+  
+          <div class="acoes-formulario">
+            <button
+              class="botao botao--secundario"
+              type="button"
+              (click)="cancelar(form)"
+            >
+              Cancelar
+            </button>
+  
+            <button class="botao botao--principal" type="submit">
+              {{ editandoId !== null ? 'Salvar e Publicar' : 'Publicar Aviso' }}
+            </button>
+          </div>
+        </form>
+      </section>
+  
+      <section class="painel publicados">
+        <h2 class="titulo-secao titulo-secao--verde">Avisos Publicados</h2>
+  
+        <div class="tabela-container">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Categoria</th>
+                <th scope="col">Título do Aviso</th>
+                <th scope="col">Data</th>
+                <th scope="col">Status</th>
+                <th scope="col" class="coluna-acoes">Ações</th>
+              </tr>
+            </thead>
+  
+            <tbody>
+              @for (aviso of visiveis; track aviso.id) {
+                <tr>
+                  <td>
+                    <span [class]="'etiqueta ' + aviso.cor">
+                      {{ aviso.etiqueta }}
+                    </span>
+                  </td>
+  
+                  <td>
+                    <span class="titulo-aviso" [title]="aviso.titulo">
+                      {{ aviso.titulo }}
+                    </span>
+                  </td>
+  
+                  <td class="data">
+                    {{ formatarData(aviso.data) }}
+                    @if (aviso.fim) {
+                      <small>até {{ formatarData(aviso.fim) }}</small>
+                    }
+                  </td>
+  
+                  <td>
+                    <span
+                      class="status"
+                      [class.rascunho]="aviso.status === 'Rascunho'"
+                    >
+                      {{ aviso.status }}
+                    </span>
+                  </td>
+  
+                  <td>
+                    <div class="acoes-tabela">
+                      <button
+                        class="editar"
+                        type="button"
+                        [attr.aria-label]="'Editar ' + aviso.titulo"
+                        (click)="editar(aviso, form, tituloInput)"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          aria-hidden="true"
+                        >
+                          <path d="m15 5 4 4M4 20l4-1L20 7a2.8 2.8 0 0 0-4-4L4 15Z" />
+                        </svg>
+                      </button>
+  
+                      <button
+                        class="excluir"
+                        type="button"
+                        [attr.aria-label]="'Excluir ' + aviso.titulo"
+                        (click)="pedirExclusao(aviso, confirmacao)"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          aria-hidden="true"
+                        >
+                          <path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="vazio">Nenhum aviso encontrado.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+  
+        <div class="paginacao">
+          <p>
+            Exibindo {{ visiveis.length }} de {{ filtrados.length }}
+            avisos {{ pesquisa ? 'encontrados' : 'cadastrados' }}
+          </p>
+  
+          <nav aria-label="Páginas da lista de avisos">
+            @for (numero of paginas; track numero) {
+              <button
+                type="button"
+                [class.ativo]="pagina === numero"
+                [attr.aria-current]="pagina === numero ? 'page' : null"
+                [attr.aria-label]="'Página ' + numero"
+                (click)="pagina = numero"
+              >
+                {{ numero }}
+              </button>
+            }
+          </nav>
+        </div>
+      </section>
+    </div>
+  
+    @if (mensagem) {
+      <div class="mensagem" [class.erro]="erro" role="status">
+        <p>{{ mensagem }}</p>
+        @if (!erro) {
+          <a routerLink="/avisos">Ver avisos no site →</a>
+        }
+      </div>
+    }
+  </main>
+  
+  <footer class="rodape">
+    <div class="container">
+      <div class="rodape__grade">
+        <div>
+          <h2>E.E. Monsenhor Bicudo</h2>
+          <p>
+            Comprometidos em oferecer ensino público de alta qualidade
+            para a formação integral e cidadã dos jovens da nossa comunidade.
+          </p>
+        </div>
+  
+        <div class="rodape__navegacao">
+          <h3>Navegação</h3>
+          <a routerLink="/admin/inicio">Início</a>
+          <a routerLink="/admin/avisos">Avisos</a>
+          <a routerLink="/admin/cardapio">Cardápio</a>
+        </div>
+  
+        <div class="rodape__navegacao">
+          <h3>Secretaria</h3>
+          <span>Matrículas</span>
+          <span>Documentos</span>
+          <span>Contato</span>
+        </div>
+      </div>
+  
+      <div class="rodape__base">
+        <p>© 2026 E.E. Monsenhor Bicudo. Todos os direitos reservados.</p>
+        <p>Painel Administrativo Escolar.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <dialog #confirmacao class="modal" aria-labelledby="titulo-exclusao">
+    <h2 id="titulo-exclusao">Excluir aviso?</h2>
+    <p>
+      Deseja excluir o aviso
+      <strong>“{{ avisoParaExcluir?.titulo }}”</strong>?
+    </p>
+  
+    <div class="acoes-formulario">
+      <button
+        class="botao botao--secundario"
+        type="button"
+        autofocus
+        (click)="confirmacao.close()"
+      >
+        Cancelar
+      </button>
+  
+      <button
+        class="botao botao--perigo"
+        type="button"
+        (click)="confirmarExclusao(confirmacao, form)"
+      >
+        Excluir Aviso
+      </button>
+    </div>
+  </dialog>

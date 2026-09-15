@@ -1,0 +1,49 @@
+.provisorio {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 24px;
+    background: #f4f7fa;
+    color: #263122;
+  
+    section {
+      width: min(100%, 560px);
+      padding: 32px;
+      border: 1px solid #e0e7ef;
+      border-radius: 18px;
+      background: white;
+    }
+  
+    span {
+      color: #758e9d;
+      font-size: 11px;
+      font-weight: 700;
+    }
+  
+    h1 {
+      margin: 12px 0;
+      font-size: 27px;
+    }
+  
+    p {
+      color: #7b8b9b;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+  
+    a {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 12px 18px;
+      border-radius: 7px;
+      background: #758e9d;
+      color: white;
+      font-size: 13px;
+      text-decoration: none;
+  
+      &:focus-visible {
+        outline: 3px solid #315a7d;
+        outline-offset: 4px;
+      }
+    }
+  }

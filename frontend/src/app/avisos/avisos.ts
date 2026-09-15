@@ -8,6 +8,8 @@ import {
   DadosEscolaService,
 } from '../dados-escola.service';
 
+import { AvisosService } from '../avisos.service';
+
 @Component({
   selector: 'app-avisos',
   standalone: true,
@@ -16,7 +18,9 @@ import {
   styleUrl: './avisos.scss',
 })
 export class Avisos {
-  private readonly dados = inject(DadosEscolaService);
+  private readonly dados = inject(DadosEscolaService)
+  private readonly avisosStore = inject(AvisosService);
+  
 
   readonly categorias = [
     'Todos',
@@ -27,9 +31,11 @@ export class Avisos {
     'Geral',
   ];
 
-  readonly meses = [...new Set(
-    this.dados.avisos.map(aviso => aviso.data.slice(0, 7)),
-  )].sort();
+  get meses(): string[] {
+    return [...new Set(
+      this.avisosStore.publicados().map(aviso => aviso.data.slice(0, 7)),
+    )].sort();
+  }
 
   readonly proximosEventos = [...this.dados.eventos]
     .sort((a, b) => a.data.localeCompare(b.data))
@@ -48,35 +54,38 @@ export class Avisos {
       .toLowerCase();
   }
 
-  get avisosFiltrados(): Aviso[] {
+  get avisosFiltrados() {
     const busca = this.normalizar(this.pesquisa.trim());
-
-    const resultado = this.dados.avisos.filter(aviso => {
-      const correspondeCategoria =
-        this.categoria === 'Todos' ||
-        aviso.categoria === this.categoria;
-
-      const correspondePesquisa = this.normalizar(
-        `${aviso.titulo} ${aviso.resumo} ${aviso.detalhes}`,
-      ).includes(busca);
-
-      const correspondeMes =
-        !this.mes || aviso.data.startsWith(this.mes);
-
-      return correspondeCategoria && correspondePesquisa && correspondeMes;
-    });
-
-    return resultado.sort((a, b) => {
-      if (this.ordem === 'antigos') {
-        return a.publicado.localeCompare(b.publicado);
-      }
-
-      if (this.ordem === 'data') {
-        return a.data.localeCompare(b.data);
-      }
-
-      return b.publicado.localeCompare(a.publicado);
-    });
+  
+    return this.avisosStore.publicados()
+      .filter(aviso => {
+        const categoria =
+          this.categoria === 'Todos' ||
+          aviso.categoria === this.categoria;
+  
+        const pesquisa = this.normalizar(
+          `${aviso.titulo} ${aviso.resumo} ${aviso.detalhes}`,
+        ).includes(busca);
+  
+        const mes = !this.mes || aviso.data.startsWith(this.mes);
+  
+        return categoria && pesquisa && mes;
+      })
+      .sort((a, b) => {
+        const prioridade = Number(b.importante) - Number(a.importante);
+  
+        if (prioridade !== 0) return prioridade;
+  
+        if (this.ordem === 'antigos') {
+          return a.publicado.localeCompare(b.publicado) || a.id - b.id;
+        }
+  
+        if (this.ordem === 'data') {
+          return a.data.localeCompare(b.data);
+        }
+  
+        return b.publicado.localeCompare(a.publicado) || b.id - a.id;
+      });
   }
 
   dia(data: string): string {

@@ -65,7 +65,12 @@
                 </span>
   
                 <span class="aviso__texto">
-                  <strong>{{ aviso.titulo }}</strong>
+                  <strong>
+                    @if (aviso.importante) {
+                      <span aria-label="Aviso importante">★ </span>
+                    }
+                    {{ aviso.titulo }}
+                  </strong>
                   <span>{{ aviso.resumo }}</span>
                   <span [class]="'etiqueta ' + aviso.cor">
                     {{ aviso.etiqueta }}
@@ -81,7 +86,7 @@
                   </strong>
                   <small>{{ mesCurto(aviso.data) }}</small>
   
-                  @if (!aviso.fim && aviso.id <= 2) {
+                  @if (!aviso.diaInteiro && !aviso.fim) {
                     <small>{{ aviso.horario }}</small>
                   }
                 </span>

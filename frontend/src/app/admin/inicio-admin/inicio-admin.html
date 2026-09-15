@@ -1,0 +1,199 @@
+<header class="cabecalho">
+    <div class="container cabecalho__conteudo">
+      <a class="marca" routerLink="/admin/inicio">
+        <img
+          src="https://i.ibb.co/KzS2Wzd7/inicio.jpg"
+          alt="Fachada da escola"
+        />
+  
+        <span>
+          <strong>E.E. MONSENHOR BICUDO</strong>
+          <small>PAINEL ADMINISTRATIVO</small>
+        </span>
+      </a>
+  
+      <nav aria-label="Menu administrativo">
+        <a routerLink="/admin/inicio" class="ativo" aria-current="page">
+          Início
+        </a>
+      
+        <a routerLink="/admin/cardapio">Cardápio</a>
+      
+        <a routerLink="/admin/avisos">Avisos</a>
+      
+        <a routerLink="/sobre">Sobre Nós</a>
+      </nav>
+  
+      <button class="botao-sair" type="button" (click)="sair()">
+        Sair
+      </button>
+    </div>
+  </header>
+  
+  <main>
+    <section class="apresentacao">
+      <div class="container apresentacao__conteudo">
+        <div class="apresentacao__texto">
+          <span class="etiqueta">Olá, Administrador</span>
+  
+          <h1>Painel Administrativo</h1>
+  
+          <p>
+            Gerencie de forma centralizada os avisos institucionais,
+            atualizações de cardápio e acompanhe as métricas de
+            engajamento da comunidade escolar.
+          </p>
+  
+          <div class="destaques">
+            <div class="destaque">
+              <span class="destaque__icone" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="4" width="18" height="13" rx="2" />
+                  <path d="M8 21h8M12 17v4" />
+                </svg>
+              </span>
+  
+              <span>
+                <strong>Ensino Médio</strong>
+                <small>Técnico Integrado</small>
+              </span>
+            </div>
+  
+            <div class="destaque">
+              <span class="destaque__icone" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="8" r="5" />
+                  <path d="m8 12-2 9 6-3 6 3-2-9" />
+                </svg>
+              </span>
+  
+              <span>
+                <strong>Métricas</strong>
+                <small>Acompanhamento</small>
+              </span>
+            </div>
+          </div>
+        </div>
+  
+        <img
+          class="apresentacao__foto"
+          src="https://i.ibb.co/KzS2Wzd7/inicio.jpg"
+          alt="Prédio da E.E. Monsenhor Bicudo"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+  
+    <section class="gerenciar" aria-label="Gerenciamento da escola">
+      <div class="container gerenciar__lista">
+        <article class="cartao">
+          <div class="cartao__titulo">
+            <span class="cartao__icone" aria-hidden="true">🍲</span>
+            <h2>Gerenciar Cardápio</h2>
+          </div>
+  
+          <p>
+            Atualize o cardápio diário da escola (Café da Manhã, Almoço e
+            Café da Tarde). Mantenha pais e alunos informados sobre a
+            alimentação balanceada de cada dia.
+          </p>
+  
+          <a class="botao" routerLink="/admin/cardapio">
+            Ir para Cardápio
+          </a>
+        </article>
+  
+        <article class="cartao">
+          <div class="cartao__titulo">
+            <span class="cartao__icone" aria-hidden="true">📢</span>
+            <h2>Gerenciar Avisos</h2>
+          </div>
+  
+          <p>
+            Publique comunicados oficiais sobre reuniões de pais e
+            mestres, feriados facultativos, calendário de provas e
+            eventos especiais de forma instantânea.
+          </p>
+  
+          <a class="botao" routerLink="/admin/avisos">
+            Ir para Avisos
+          </a>
+        </article>
+      </div>
+    </section>
+  </main>
+  
+  <footer class="rodape">
+    <div class="container">
+      <div class="rodape__grade">
+        <div>
+          <h2>E.E. Monsenhor Bicudo</h2>
+          <p class="rodape__descricao">
+            Comprometidos em oferecer ensino público de alta qualidade
+            para a formação integral e cidadã dos jovens da nossa
+            comunidade.
+          </p>
+        </div>
+  
+        <div>
+          <h3>Contato</h3>
+          <p>☎ (14) 3433-1610</p>
+          <p>✉ monsenhorbicudo&#64;educacao.sp.gov.br</p>
+        </div>
+  
+        <div>
+          <h3>Endereço</h3>
+          <p>
+            Av. Rio Branco, 803 - Sen. Salgado Filho, Marília - SP,<br />
+            17509-013
+          </p>
+        </div>
+      </div>
+  
+      <div class="rodape__base">
+        <p>
+          © 2026 E.E. Monsenhor Bicudo. Secretaria da Educação - São Paulo.
+        </p>
+  
+        <div class="rodape__links">
+          <button type="button" (click)="privacidade.showModal()">
+            Portal de Privacidade
+          </button>
+  
+          <button type="button" (click)="termos.showModal()">
+            Termos de Uso
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <dialog #privacidade class="modal" aria-labelledby="titulo-privacidade">
+    <h2 id="titulo-privacidade">Portal de Privacidade</h2>
+    <p>A política de privacidade da escola ainda será disponibilizada.</p>
+    <button class="botao" type="button" (click)="privacidade.close()">
+      Fechar
+    </button>
+  </dialog>
+  
+  <dialog #termos class="modal" aria-labelledby="titulo-termos">
+    <h2 id="titulo-termos">Termos de Uso</h2>
+    <p>Os termos de uso do portal ainda serão disponibilizados.</p>
+    <button class="botao" type="button" (click)="termos.close()">
+      Fechar
+    </button>
+  </dialog>

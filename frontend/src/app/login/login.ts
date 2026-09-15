@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,6 +11,9 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login.scss',
 })
 export class Login {
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+
   email = '';
   senha = '';
   mostrarSenha = false;
@@ -27,8 +31,12 @@ export class Login {
       return;
     }
 
-    // Aqui será chamada a API de autenticação.
-    this.mensagem =
-      'Formulário validado. O acesso ao painel será disponibilizado após a integração com o servidor.';
+    if (!this.auth.entrar(this.email, this.senha)) {
+      this.mensagem = 'E-mail ou senha incorretos.';
+      return;
+    }
+
+    this.senha = '';
+    void this.router.navigateByUrl('/admin/inicio');
   }
 }
