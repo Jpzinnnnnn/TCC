@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LayoutEscolar } from '../compartilhados/layout-escolar/layout-escolar';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-sobre',
@@ -11,6 +13,9 @@ import { LayoutEscolar } from '../compartilhados/layout-escolar/layout-escolar';
 export class Sobre {
   // Conteúdo de demonstração baseado no protótipo.
   // Depois poderá ser carregado pelo serviço conectado à API.
+
+  readonly administrativo =
+  inject(ActivatedRoute).snapshot.data['administrativo'] === true;
 
   readonly valores = [
     'Respeito e responsabilidade',

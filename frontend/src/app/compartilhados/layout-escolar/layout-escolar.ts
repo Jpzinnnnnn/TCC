@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, Input, inject } from '@angular/core';
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
+
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-layout-escolar',
@@ -8,4 +14,14 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   templateUrl: './layout-escolar.html',
   styleUrl: './layout-escolar.scss',
 })
-export class LayoutEscolar {}
+export class LayoutEscolar {
+  @Input() administrativo = false;
+
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+
+  sair(): void {
+    this.auth.sair();
+    void this.router.navigateByUrl('/admin', { replaceUrl: true });
+  }
+}

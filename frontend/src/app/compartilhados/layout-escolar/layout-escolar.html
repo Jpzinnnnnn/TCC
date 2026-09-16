@@ -1,35 +1,67 @@
 <header class="cabecalho">
-    <div class="container cabecalho__conteudo">
-      <a class="marca" routerLink="/home">
-        
-  
-        <span>
-          <strong>E.E. MONSENHOR BICUDO</strong>
-          <small>ESCOLA PÚBLICA ESTADUAL</small>
-        </span>
+  <div class="container cabecalho__conteudo">
+    <a
+      class="marca"
+      [routerLink]="administrativo ? '/admin/inicio' : '/home'"
+    >
+      
+
+      <span>
+        <strong>E.E. MONSENHOR BICUDO</strong>
+        <small>
+          {{
+            administrativo
+              ? 'PAINEL ADMINISTRATIVO'
+              : 'ESCOLA PÚBLICA ESTADUAL'
+          }}
+        </small>
+      </span>
+    </a>
+
+    <nav aria-label="Menu principal">
+      <a
+        [routerLink]="administrativo ? '/admin/inicio' : '/home'"
+        routerLinkActive="ativo"
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+      >
+        Início
       </a>
-  
-      <nav aria-label="Menu principal">
-        <a routerLink="/home" routerLinkActive="ativo">
-          Início
-        </a>
-      
-        <a routerLink="/cardapio" routerLinkActive="ativo">
-          Cardápio
-        </a>
-      
-        <a routerLink="/avisos" routerLinkActive="ativo">
-          Avisos
-        </a>
-      
-        <a routerLink="/sobre" routerLinkActive="ativo">
-          Sobre nós
-        </a>
-      </nav>
-  
+
+      <a
+        [routerLink]="administrativo ? '/admin/cardapio' : '/cardapio'"
+        routerLinkActive="ativo"
+        ariaCurrentWhenActive="page"
+      >
+        Cardápio
+      </a>
+
+      <a
+        [routerLink]="administrativo ? '/admin/avisos' : '/avisos'"
+        routerLinkActive="ativo"
+        ariaCurrentWhenActive="page"
+      >
+        Avisos
+      </a>
+
+      <a
+        [routerLink]="administrativo ? '/admin/sobre' : '/sobre'"
+        routerLinkActive="ativo"
+        ariaCurrentWhenActive="page"
+      >
+        Sobre nós
+      </a>
+    </nav>
+
+    @if (administrativo) {
+      <button class="admin" type="button" (click)="sair()">
+        Sair
+      </button>
+    } @else {
       <a class="admin" routerLink="/admin">Admin</a>
-    </div>
-  </header>
+    }
+  </div>
+</header>
   
   <main>
     <ng-content></ng-content>

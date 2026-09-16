@@ -39,4 +39,11 @@ export const routes: Routes = [
     component: AvisosAdmin,
     canActivate: [adminGuard],
   },
+
+  {
+    path: 'admin/sobre',
+    component: Sobre,
+    canActivate: [adminGuard],
+    data: { administrativo: true },
+  },
 ];

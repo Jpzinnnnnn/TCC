@@ -689,3 +689,19 @@ textarea {
     scroll-behavior: auto;
   }
 }
+
+.cabecalho nav a {
+  display: inline-block;
+  padding-block: 8px;
+  border-bottom: 2px solid transparent;
+  box-shadow: none;
+  text-decoration: none;
+  line-height: 1.5;
+
+  &.ativo {
+    color: #285879;
+    font-weight: 700;
+    border-bottom-color: #285879;
+    box-shadow: none;
+  }
+}
