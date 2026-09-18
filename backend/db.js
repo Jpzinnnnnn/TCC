@@ -147,7 +147,10 @@ async function initDb() {
       );
     `);
 
-    // 4. Seed de dados iniciais se tabelas vazias
+    // 4. Migração e sincronização de colunas (caso as tabelas já existam de versões anteriores)
+    await migrarTabelasExistentes();
+
+    // 5. Seed de dados iniciais se tabelas vazias
     await semearDadosIniciais();
 
     console.log('✅ Banco de dados e tabelas prontos para uso.');
@@ -156,6 +159,46 @@ async function initDb() {
     console.error('❌ Erro na inicialização do banco de dados:', err);
     throw err;
   }
+}
+
+async function garantirColuna(tabela, coluna, definicao) {
+  try {
+    const [cols] = await pool.query(
+      `SELECT COLUMN_NAME
+       FROM information_schema.COLUMNS
+       WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?`,
+      [tabela, coluna]
+    );
+
+    if (cols.length === 0) {
+      await pool.query(`ALTER TABLE \`${tabela}\` ADD COLUMN \`${coluna}\` ${definicao}`);
+      console.log(`➕ Coluna '${coluna}' adicionada automaticamente à tabela '${tabela}'.`);
+    }
+  } catch (err) {
+    console.warn(`⚠️ Aviso ao verificar/adicionar coluna ${tabela}.${coluna}:`, err.message);
+  }
+}
+
+async function migrarTabelasExistentes() {
+  // Garantir todas as colunas de Aviso (caso a tabela já existisse sem 'publicado')
+  await garantirColuna('Aviso', 'publicado', 'VARCHAR(20) DEFAULT NULL');
+  await garantirColuna('Aviso', 'horario_comeco', 'VARCHAR(20) DEFAULT NULL');
+  await garantirColuna('Aviso', 'horario_final', 'VARCHAR(20) DEFAULT NULL');
+  await garantirColuna('Aviso', 'evento_dia', 'BOOLEAN DEFAULT FALSE');
+  await garantirColuna('Aviso', 'importante', 'BOOLEAN DEFAULT FALSE');
+  await garantirColuna('Aviso', 'criado_em', 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+
+  // Preencher publicado com a data do aviso caso já existam registros legados com publicado nulo
+  try {
+    await pool.query(`UPDATE Aviso SET publicado = data WHERE publicado IS NULL`);
+  } catch (e) {}
+
+  // Garantir colunas de Evento
+  await garantirColuna('Evento', 'cor', 'VARCHAR(50) DEFAULT \'azul\'');
+  await garantirColuna('Evento', 'criado_em', 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+
+  // Garantir colunas de Usuario
+  await garantirColuna('Usuario', 'criado_em', 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
 }
 
 async function semearDadosIniciais() {
