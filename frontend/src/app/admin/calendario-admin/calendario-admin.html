@@ -1,0 +1,275 @@
+<header class="cabecalho">
+  <div class="container cabecalho__conteudo">
+    <a class="marca" routerLink="/admin/inicio">
+      <span>
+        <strong>E.E. MONSENHOR BICUDO</strong>
+        <small>ESCOLA PÚBLICA ESTADUAL</small>
+      </span>
+    </a>
+
+    <nav aria-label="Menu administrativo">
+      <a routerLink="/admin/inicio">Início</a>
+      <a routerLink="/admin/cardapio">Cardápio</a>
+      <a routerLink="/admin/avisos">Avisos</a>
+      <a routerLink="/admin/calendario" class="ativo" aria-current="page">Calendário</a>
+      <a routerLink="/admin/sobre">Sobre Nós</a>
+    </nav>
+
+    <button class="sair" type="button" (click)="sair()">Sair</button>
+  </div>
+</header>
+
+<main class="container conteudo">
+  <header class="titulo">
+    <h1>Gerenciar Calendário Escolar</h1>
+    <p>Cadastre, edite e acompanhe os eventos acadêmicos, culturais e institucionais da escola</p>
+  </header>
+
+  <label class="pesquisa">
+    <span aria-hidden="true">⌕</span>
+    <input
+      type="search"
+      placeholder="Buscar eventos por título, local ou categoria..."
+      aria-label="Buscar eventos"
+      [(ngModel)]="pesquisa"
+      (ngModelChange)="pesquisar()"
+    />
+  </label>
+
+  <div class="grade">
+    <section class="painel formulario">
+      <h2 class="titulo-secao">
+        {{ editandoId !== null ? 'Editar Evento' : 'Criar Novo Evento' }}
+      </h2>
+
+      <form #form="ngForm" (ngSubmit)="salvar(form)" novalidate>
+        <div class="campo">
+          <label for="titulo-evento">Título do Evento</label>
+          <input
+            #tituloInput
+            id="titulo-evento"
+            name="titulo"
+            type="text"
+            placeholder="Ex: Feira de Ciências 2026"
+            required
+            maxlength="100"
+            [(ngModel)]="formulario.titulo"
+          />
+        </div>
+
+        <div class="campos-duplos">
+          <div class="campo">
+            <label for="categoria-evento">Categoria</label>
+            <select
+              id="categoria-evento"
+              name="categoria"
+              required
+              [(ngModel)]="formulario.categoria"
+            >
+              @for (cat of categorias; track cat.valor) {
+                <option [value]="cat.valor">{{ cat.nome }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="cor-evento">Cor do Marcador</label>
+            <select
+              id="cor-evento"
+              name="cor"
+              required
+              [(ngModel)]="formulario.cor"
+            >
+              @for (c of cores; track c.valor) {
+                <option [value]="c.valor">{{ c.nome }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="campos-duplos">
+          <div class="campo">
+            <label for="data-evento">Data do Evento</label>
+            <input
+              id="data-evento"
+              name="data"
+              type="date"
+              required
+              [(ngModel)]="formulario.data"
+            />
+          </div>
+
+          <div class="campo">
+            <label for="horario-evento">Horário</label>
+            <input
+              id="horario-evento"
+              name="horario"
+              type="text"
+              placeholder="Ex: 08h00 às 12h00 ou 19h00"
+              required
+              maxlength="50"
+              [(ngModel)]="formulario.horario"
+            />
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="local-evento">Local do Evento</label>
+          <input
+            id="local-evento"
+            name="local"
+            type="text"
+            placeholder="Ex: Quadra Poliesportiva, Auditório Principal"
+            required
+            maxlength="100"
+            [(ngModel)]="formulario.local"
+          />
+        </div>
+
+        <div class="campo">
+          <label for="descricao-evento">Descrição do Evento</label>
+          <textarea
+            id="descricao-evento"
+            name="descricao"
+            rows="4"
+            placeholder="Descreva os objetivos, público-alvo e detalhes da atividade..."
+            required
+            maxlength="1000"
+            [(ngModel)]="formulario.descricao"
+          ></textarea>
+        </div>
+
+        @if (mensagem) {
+          <div class="alerta" [class.alerta--erro]="erro" role="status">
+            {{ mensagem }}
+          </div>
+        }
+
+        <div class="acoes-formulario">
+          <button class="botao-principal" type="submit">
+            {{ editandoId !== null ? 'Atualizar Evento' : 'Salvar Evento' }}
+          </button>
+
+          @if (editandoId !== null) {
+            <button
+              class="botao-secundario"
+              type="button"
+              (click)="cancelar(form)"
+            >
+              Cancelar Edição
+            </button>
+          }
+        </div>
+      </form>
+    </section>
+
+    <section class="painel lista" aria-label="Eventos cadastrados">
+      <div class="cabecalho-lista">
+        <h2 class="titulo-secao">Eventos Cadastrados</h2>
+        <span class="total-contador">{{ filtrados.length }} eventos</span>
+      </div>
+
+      @if (visiveis.length === 0) {
+        <div class="vazio">
+          <p>Nenhum evento encontrado.</p>
+        </div>
+      } @else {
+        <div class="itens">
+          @for (evento of visiveis; track evento.id) {
+            <article class="cartao-evento" [class]="'cor--' + evento.cor">
+              <div class="cartao-evento__corpo">
+                <div class="cartao-evento__topo">
+                  <span class="etiqueta-categoria">{{ evento.categoria }}</span>
+                  <time class="data-evento">{{ formatarData(evento.data) }}</time>
+                </div>
+
+                <h3 class="cartao-evento__titulo">{{ evento.titulo }}</h3>
+                <p class="cartao-evento__descricao">{{ evento.descricao }}</p>
+
+                <div class="cartao-evento__detalhes">
+                  <span>⏰ {{ evento.horario }}</span>
+                  <span>📍 {{ evento.local }}</span>
+                </div>
+              </div>
+
+              <div class="cartao-evento__acoes">
+                <button
+                  class="botao-icone"
+                  type="button"
+                  title="Editar evento"
+                  aria-label="Editar evento"
+                  (click)="editar(evento, form, tituloInput)"
+                >
+                  ✎
+                </button>
+                <button
+                  class="botao-icone botao-icone--perigo"
+                  type="button"
+                  title="Excluir evento"
+                  aria-label="Excluir evento"
+                  (click)="pedirExclusao(evento, modalExclusao)"
+                >
+                  ✕
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+
+        @if (totalPaginas > 1) {
+          <nav class="paginacao" aria-label="Paginação de eventos">
+            <button
+              type="button"
+              [disabled]="pagina === 1"
+              (click)="pagina = pagina - 1"
+            >
+              Anterior
+            </button>
+            @for (p of paginas; track p) {
+              <button
+                type="button"
+                [class.ativo]="p === pagina"
+                (click)="pagina = p"
+              >
+                {{ p }}
+              </button>
+            }
+            <button
+              type="button"
+              [disabled]="pagina === totalPaginas"
+              (click)="pagina = pagina + 1"
+            >
+              Próximo
+            </button>
+          </nav>
+        }
+      }
+    </section>
+  </div>
+</main>
+
+<dialog #modalExclusao class="modal">
+  <div class="modal__conteudo">
+    <h2>Confirmar Exclusão</h2>
+    <p>
+      Deseja realmente excluir o evento
+      <strong>"{{ eventoParaExcluir?.titulo }}"</strong>?
+    </p>
+    <div class="modal__acoes">
+      <button
+        class="botao-secundario"
+        type="button"
+        (click)="modalExclusao.close()"
+      >
+        Cancelar
+      </button>
+      <button
+        class="botao-perigo"
+        type="button"
+        (click)="confirmarExclusao(modalExclusao, form)"
+      >
+        Excluir Evento
+      </button>
+    </div>
+  </div>
+</dialog>

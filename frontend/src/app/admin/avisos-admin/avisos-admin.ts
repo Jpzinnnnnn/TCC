@@ -152,15 +152,21 @@ export class AvisosAdmin {
         status: 'Publicado',
       },
       this.editandoId,
-    );
+    ).subscribe({
+      next: () => {
+        this.mensagem = estavaEditando
+          ? 'Aviso atualizado com sucesso no banco de dados!'
+          : 'Aviso publicado com sucesso no banco de dados!';
+      },
+      error: () => {
+        this.erro = true;
+        this.mensagem = 'Erro ao sincronizar com o banco de dados.';
+      }
+    });
 
     this.cancelar(form);
     this.pesquisa = '';
     this.pagina = 1;
-
-    this.mensagem = estavaEditando
-      ? 'Aviso atualizado e publicado nesta sessão.'
-      : 'Aviso publicado nesta sessão.';
   }
 
   editar(
@@ -208,7 +214,15 @@ export class AvisosAdmin {
     if (!this.avisoParaExcluir) return;
 
     const id = this.avisoParaExcluir.id;
-    this.avisos.excluir(id);
+    this.avisos.excluir(id).subscribe({
+      next: () => {
+        this.mensagem = 'Aviso excluído com sucesso do banco de dados.';
+      },
+      error: () => {
+        this.erro = true;
+        this.mensagem = 'Erro ao excluir aviso do banco.';
+      }
+    });
 
     if (this.editandoId === id) {
       this.cancelar(form);
@@ -217,7 +231,6 @@ export class AvisosAdmin {
     this.pagina = Math.min(this.pagina, this.totalPaginas);
     this.avisoParaExcluir = null;
     this.erro = false;
-    this.mensagem = 'Aviso excluído nesta sessão.';
     modal.close();
   }
 

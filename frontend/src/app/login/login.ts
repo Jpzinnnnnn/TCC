@@ -31,12 +31,19 @@ export class Login {
       return;
     }
 
-    if (!this.auth.entrar(this.email, this.senha)) {
-      this.mensagem = 'E-mail ou senha incorretos.';
-      return;
-    }
+    this.auth.entrar(this.email, this.senha).subscribe({
+      next: (sucesso) => {
+        if (!sucesso) {
+          this.mensagem = 'E-mail ou senha incorretos.';
+          return;
+        }
 
-    this.senha = '';
-    void this.router.navigateByUrl('/admin/inicio');
+        this.senha = '';
+        void this.router.navigateByUrl('/admin/inicio');
+      },
+      error: () => {
+        this.mensagem = 'Erro de conexão com o servidor. Tente novamente.';
+      },
+    });
   }
 }

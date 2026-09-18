@@ -12,6 +12,7 @@ import { adminGuard } from './admin.guard';
 
 import { CardapioAdmin } from './admin/cardapio-admin/cardapio-admin';
 import { AvisosAdmin } from './admin/avisos-admin/avisos-admin';
+import { CalendarioAdmin } from './admin/calendario-admin/calendario-admin';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -37,6 +38,11 @@ export const routes: Routes = [
   {
     path: 'admin/avisos',
     component: AvisosAdmin,
+    canActivate: [adminGuard],
+  },
+  {
+    path: 'admin/calendario',
+    component: CalendarioAdmin,
     canActivate: [adminGuard],
   },
 

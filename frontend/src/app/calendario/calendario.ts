@@ -9,9 +9,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { LayoutEscolar } from '../compartilhados/layout-escolar/layout-escolar';
 import {
-  DadosEscolaService,
+  CalendarioService,
   Evento,
-} from '../services/dados-escola.service';
+} from '../services/calendario.service';
 
 interface DiaCalendario {
   numero: number;
@@ -28,7 +28,7 @@ interface DiaCalendario {
   styleUrl: './calendario.scss',
 })
 export class Calendario implements AfterViewInit {
-  private readonly dados = inject(DadosEscolaService);
+  private readonly calendarioService = inject(CalendarioService);
   private readonly rota = inject(ActivatedRoute);
 
   @ViewChild('detalhes')
@@ -71,7 +71,7 @@ export class Calendario implements AfterViewInit {
     }
 
     const id = Number(this.rota.snapshot.queryParamMap.get('evento'));
-    const evento = this.dados.eventos.find(item => item.id === id);
+    const evento = this.calendarioService.todos().find(item => item.id === id);
 
     if (evento) {
       this.eventoSelecionado = evento;
@@ -96,7 +96,7 @@ export class Calendario implements AfterViewInit {
   }
 
   get eventosDaCategoria(): Evento[] {
-    return this.dados.eventos.filter(evento =>
+    return this.calendarioService.todos().filter(evento =>
       this.categoria === 'Todos' || evento.categoria === this.categoria,
     );
   }

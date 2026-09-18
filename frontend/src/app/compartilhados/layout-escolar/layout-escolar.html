@@ -45,6 +45,14 @@
       </a>
 
       <a
+        [routerLink]="administrativo ? '/admin/calendario' : '/calendario'"
+        routerLinkActive="ativo"
+        ariaCurrentWhenActive="page"
+      >
+        Calendário
+      </a>
+
+      <a
         [routerLink]="administrativo ? '/admin/sobre' : '/sobre'"
         routerLinkActive="ativo"
         ariaCurrentWhenActive="page"

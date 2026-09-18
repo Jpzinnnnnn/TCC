@@ -114,7 +114,7 @@
       aria-label="Refeições do dia selecionado"
       aria-live="polite"
     >
-      @for (refeicao of diaAtual.refeicoes; track refeicao.titulo) {
+      @for (refeicao of refeicoesDoDia; track refeicao.titulo) {
         <article class="refeicao">
           <header class="refeicao__cabecalho">
             <span class="refeicao__icone" aria-hidden="true">

@@ -3,12 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { LayoutEscolar } from '../compartilhados/layout-escolar/layout-escolar';
-import {
-  Aviso,
-  DadosEscolaService,
-} from '../services/dados-escola.service';
-
+import { Aviso } from '../services/dados-escola.service';
 import { AvisosService } from '../services/avisos.service';
+import { CalendarioService } from '../services/calendario.service';
 
 @Component({
   selector: 'app-avisos',
@@ -18,9 +15,8 @@ import { AvisosService } from '../services/avisos.service';
   styleUrl: './avisos.scss',
 })
 export class Avisos {
-  private readonly dados = inject(DadosEscolaService)
   private readonly avisosStore = inject(AvisosService);
-  
+  private readonly calendario = inject(CalendarioService);
 
   readonly categorias = [
     'Todos',
@@ -37,9 +33,11 @@ export class Avisos {
     )].sort();
   }
 
-  readonly proximosEventos = [...this.dados.eventos]
-    .sort((a, b) => a.data.localeCompare(b.data))
-    .slice(0, 3);
+  get proximosEventos() {
+    return [...this.calendario.todos()]
+      .sort((a, b) => a.data.localeCompare(b.data))
+      .slice(0, 3);
+  }
 
   categoria = 'Todos';
   pesquisa = '';
