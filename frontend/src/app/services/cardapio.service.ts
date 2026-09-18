@@ -2,51 +2,104 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface Cardapio {
+
+// =====================================================
+// INTERFACE DOS DADOS DO CARDÁPIO
+// =====================================================
+
+export interface ItemCardapio {
   id_cardapio?: number;
   comida: string;
   fk_id_horario: number;
 
+  // Dados da tabela Horario
   id_horario?: number;
   hora?: number;
   dia?: string;
 }
+
+
+// =====================================================
+// RESPOSTA DA API
+// =====================================================
 
 export interface RespostaCardapio {
   mensagem: string;
   id_cardapio?: number;
 }
 
+
+// =====================================================
+// SERVICE
+// =====================================================
+
 @Injectable({
   providedIn: 'root'
 })
 export class CardapioService {
 
-  // URL da API
   private apiUrl = 'http://localhost:3000/cardapio';
-  constructor(private http: HttpClient) { }
 
-  buscarTodos(): Observable<Cardapio[]> {
-    return this.http.get<Cardapio[]>(
+
+  // ===================================================
+  // CONSTRUTOR
+  // ===================================================
+
+  constructor(
+    private http: HttpClient
+  ) {}
+
+
+  // ===================================================
+  // GET - BUSCAR TODO O CARDÁPIO
+  // ===================================================
+
+  buscarTodos(): Observable<ItemCardapio[]> {
+
+    return this.http.get<ItemCardapio[]>(
       this.apiUrl
     );
+
   }
 
 
-  buscarPorDia(dia: string): Observable<Cardapio[]> {
-    return this.http.get<Cardapio[]>(
+  // ===================================================
+  // GET - BUSCAR POR DIA
+  // ===================================================
+
+  buscarPorDia(
+    dia: string
+  ): Observable<ItemCardapio[]> {
+
+    return this.http.get<ItemCardapio[]>(
       `${this.apiUrl}/${dia}`
     );
+
   }
 
-  buscarPorId(id: number): Observable<Cardapio> {
 
-    return this.http.get<Cardapio>(
+  // ===================================================
+  // GET - BUSCAR POR ID
+  // ===================================================
+
+  buscarPorId(
+    id: number
+  ): Observable<ItemCardapio> {
+
+    return this.http.get<ItemCardapio>(
       `${this.apiUrl}/id/${id}`
     );
+
   }
 
-  cadastrar(cardapio: Cardapio): Observable<RespostaCardapio> {
+
+  // ===================================================
+  // POST - CADASTRAR
+  // ===================================================
+
+  cadastrar(
+    cardapio: ItemCardapio
+  ): Observable<RespostaCardapio> {
 
     return this.http.post<RespostaCardapio>(
       this.apiUrl,
@@ -55,11 +108,17 @@ export class CardapioService {
         fk_id_horario: cardapio.fk_id_horario
       }
     );
+
   }
+
+
+  // ===================================================
+  // PUT - ATUALIZAR
+  // ===================================================
 
   atualizar(
     id: number,
-    cardapio: Cardapio
+    cardapio: ItemCardapio
   ): Observable<RespostaCardapio> {
 
     return this.http.put<RespostaCardapio>(
@@ -72,10 +131,19 @@ export class CardapioService {
 
   }
 
-  excluir(id: number): Observable<RespostaCardapio> {
+
+  // ===================================================
+  // DELETE - EXCLUIR
+  // ===================================================
+
+  excluir(
+    id: number
+  ): Observable<RespostaCardapio> {
 
     return this.http.delete<RespostaCardapio>(
       `${this.apiUrl}/${id}`
     );
+
   }
+
 }
