@@ -369,6 +369,8 @@ async function semearDadosIniciais() {
     ];
 
     for (let d = 0; d < 5; d++) {
+      const dataDia = new Date(diaInicio);
+      dataDia.setDate(diaInicio.getDate() + d);
       const ano = dataDia.getFullYear();
       const mes = String(dataDia.getMonth() + 1).padStart(2, '0');
       const dia = String(dataDia.getDate()).padStart(2, '0');
