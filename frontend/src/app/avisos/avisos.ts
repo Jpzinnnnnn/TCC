@@ -6,9 +6,9 @@ import { LayoutEscolar } from '../compartilhados/layout-escolar/layout-escolar';
 import {
   Aviso,
   DadosEscolaService,
-} from '../dados-escola.service';
+} from '../services/dados-escola.service';
 
-import { AvisosService } from '../avisos.service';
+import { AvisosService } from '../services/avisos.service';
 
 @Component({
   selector: 'app-avisos',

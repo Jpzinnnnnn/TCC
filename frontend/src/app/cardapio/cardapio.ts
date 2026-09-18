@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CardapioService } from '../cardapio.service';
+import { CardapioService } from '../services/cardapio.service';
 
 @Component({
   selector: 'app-cardapio',

@@ -153,17 +153,19 @@ app.get('/usuario/:id', async (req, res) => {
 
 
 // =====================================================
-// CARDÁPIO
+// CARDÁPIO - CRUD COMPLETO
 // =====================================================
 
 
-// Buscar todo o cardápio
+// =====================================================
+// GET - BUSCAR TODO O CARDÁPIO
+// =====================================================
+
 app.get('/cardapio', async (req, res) => {
 
   try {
 
-    const [results] = await db.query(
-      `
+    const [results] = await db.query(`
       SELECT
         c.id_cardapio,
         c.comida,
@@ -174,11 +176,9 @@ app.get('/cardapio', async (req, res) => {
       INNER JOIN Horario h
         ON c.fk_id_horario = h.id_horario
       ORDER BY h.dia ASC, h.hora ASC
-      `
-    );
+    `);
 
-
-    return res.json(results);
+    return res.status(200).json(results);
 
   } catch (err) {
 
@@ -193,15 +193,18 @@ app.get('/cardapio', async (req, res) => {
 });
 
 
-// Buscar cardápio de uma determinada data
+// =====================================================
+// GET - BUSCAR CARDÁPIO POR DATA
+// Exemplo: /cardapio/2026-09-18
+// =====================================================
+
 app.get('/cardapio/:dia', async (req, res) => {
 
   const { dia } = req.params;
 
   try {
 
-    const [results] = await db.query(
-      `
+    const [results] = await db.query(`
       SELECT
         c.id_cardapio,
         c.comida,
@@ -213,16 +216,13 @@ app.get('/cardapio/:dia', async (req, res) => {
         ON c.fk_id_horario = h.id_horario
       WHERE h.dia = ?
       ORDER BY h.hora ASC
-      `,
-      [dia]
-    );
+    `, [dia]);
 
-
-    return res.json(results);
+    return res.status(200).json(results);
 
   } catch (err) {
 
-    console.error('❌ Erro ao buscar cardápio:', err);
+    console.error('❌ Erro ao buscar cardápio por data:', err);
 
     return res.status(500).json({
       mensagem: 'Erro ao buscar cardápio.'
@@ -232,6 +232,329 @@ app.get('/cardapio/:dia', async (req, res) => {
 
 });
 
+
+// =====================================================
+// GET - BUSCAR CARDÁPIO POR ID
+// Exemplo: /cardapio/id/1
+// =====================================================
+
+app.get('/cardapio/id/:id', async (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+
+    const [results] = await db.query(`
+      SELECT
+        c.id_cardapio,
+        c.comida,
+        c.fk_id_horario,
+        h.id_horario,
+        h.hora,
+        h.dia
+      FROM Cardapio c
+      INNER JOIN Horario h
+        ON c.fk_id_horario = h.id_horario
+      WHERE c.id_cardapio = ?
+    `, [id]);
+
+
+    if (results.length === 0) {
+
+      return res.status(404).json({
+        mensagem: 'Item do cardápio não encontrado.'
+      });
+
+    }
+
+
+    return res.status(200).json(results[0]);
+
+  } catch (err) {
+
+    console.error('❌ Erro ao buscar item do cardápio:', err);
+
+    return res.status(500).json({
+      mensagem: 'Erro ao buscar item do cardápio.'
+    });
+
+  }
+
+});
+
+
+// =====================================================
+// POST - CADASTRAR ITEM NO CARDÁPIO
+// =====================================================
+//
+// JSON esperado:
+//
+// {
+//   "comida": "Arroz, feijão e frango",
+//   "fk_id_horario": 1
+// }
+//
+// =====================================================
+
+app.post('/cardapio', async (req, res) => {
+
+  const {
+    comida,
+    fk_id_horario
+  } = req.body;
+
+
+  // Validação
+
+  if (!comida || !fk_id_horario) {
+
+    return res.status(400).json({
+      mensagem: 'Comida e horário são obrigatórios.'
+    });
+
+  }
+
+
+  try {
+
+    // Verifica se o horário existe
+
+    const [horario] = await db.query(
+      `
+      SELECT id_horario
+      FROM Horario
+      WHERE id_horario = ?
+      `,
+      [fk_id_horario]
+    );
+
+
+    if (horario.length === 0) {
+
+      return res.status(404).json({
+        mensagem: 'Horário não encontrado.'
+      });
+
+    }
+
+
+    // Insere o item
+
+    const [result] = await db.query(
+      `
+      INSERT INTO Cardapio
+      (comida, fk_id_horario)
+      VALUES (?, ?)
+      `,
+      [
+        comida,
+        fk_id_horario
+      ]
+    );
+
+
+    return res.status(201).json({
+      mensagem: 'Item adicionado ao cardápio com sucesso!',
+      id_cardapio: result.insertId
+    });
+
+
+  } catch (err) {
+
+    console.error('❌ Erro ao cadastrar item:', err);
+
+    return res.status(500).json({
+      mensagem: 'Erro ao cadastrar item no cardápio.'
+    });
+
+  }
+
+});
+
+
+// =====================================================
+// PUT - ATUALIZAR ITEM DO CARDÁPIO
+// =====================================================
+//
+// Exemplo:
+//
+// PUT /cardapio/1
+//
+// JSON:
+//
+// {
+//   "comida": "Arroz, feijão, carne e salada",
+//   "fk_id_horario": 2
+// }
+//
+// =====================================================
+
+app.put('/cardapio/:id', async (req, res) => {
+
+  const { id } = req.params;
+
+  const {
+    comida,
+    fk_id_horario
+  } = req.body;
+
+
+  // Validação
+
+  if (!comida || !fk_id_horario) {
+
+    return res.status(400).json({
+      mensagem: 'Comida e horário são obrigatórios.'
+    });
+
+  }
+
+
+  try {
+
+    // Verifica se o item existe
+
+    const [item] = await db.query(
+      `
+      SELECT id_cardapio
+      FROM Cardapio
+      WHERE id_cardapio = ?
+      `,
+      [id]
+    );
+
+
+    if (item.length === 0) {
+
+      return res.status(404).json({
+        mensagem: 'Item do cardápio não encontrado.'
+      });
+
+    }
+
+
+    // Verifica se o novo horário existe
+
+    const [horario] = await db.query(
+      `
+      SELECT id_horario
+      FROM Horario
+      WHERE id_horario = ?
+      `,
+      [fk_id_horario]
+    );
+
+
+    if (horario.length === 0) {
+
+      return res.status(404).json({
+        mensagem: 'Horário não encontrado.'
+      });
+
+    }
+
+
+    // Atualiza
+
+    await db.query(
+      `
+      UPDATE Cardapio
+      SET
+        comida = ?,
+        fk_id_horario = ?
+      WHERE id_cardapio = ?
+      `,
+      [
+        comida,
+        fk_id_horario,
+        id
+      ]
+    );
+
+
+    return res.status(200).json({
+      mensagem: 'Item do cardápio atualizado com sucesso!'
+    });
+
+
+  } catch (err) {
+
+    console.error('❌ Erro ao atualizar item:', err);
+
+    return res.status(500).json({
+      mensagem: 'Erro ao atualizar item do cardápio.'
+    });
+
+  }
+
+});
+
+
+// =====================================================
+// DELETE - EXCLUIR ITEM DO CARDÁPIO
+// =====================================================
+//
+// Exemplo:
+//
+// DELETE /cardapio/1
+//
+// =====================================================
+
+app.delete('/cardapio/:id', async (req, res) => {
+
+  const { id } = req.params;
+
+
+  try {
+
+    // Verifica se o item existe
+
+    const [item] = await db.query(
+      `
+      SELECT id_cardapio
+      FROM Cardapio
+      WHERE id_cardapio = ?
+      `,
+      [id]
+    );
+
+
+    if (item.length === 0) {
+
+      return res.status(404).json({
+        mensagem: 'Item do cardápio não encontrado.'
+      });
+
+    }
+
+
+    // Exclui
+
+    await db.query(
+      `
+      DELETE FROM Cardapio
+      WHERE id_cardapio = ?
+      `,
+      [id]
+    );
+
+
+    return res.status(200).json({
+      mensagem: 'Item removido do cardápio com sucesso!'
+    });
+
+
+  } catch (err) {
+
+    console.error('❌ Erro ao excluir item:', err);
+
+    return res.status(500).json({
+      mensagem: 'Erro ao excluir item do cardápio.'
+    });
+
+  }
+
+});
 
 // =====================================================
 // AVISOS

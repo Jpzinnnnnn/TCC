@@ -11,7 +11,7 @@ import { LayoutEscolar } from '../compartilhados/layout-escolar/layout-escolar';
 import {
   DadosEscolaService,
   Evento,
-} from '../dados-escola.service';
+} from '../services/dados-escola.service';
 
 interface DiaCalendario {
   numero: number;

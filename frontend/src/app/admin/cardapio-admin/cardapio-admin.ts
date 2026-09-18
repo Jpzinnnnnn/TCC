@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
-import { AuthService } from '../../auth.service';
-import { CardapioService } from '../../cardapio.service';
+import { AuthService } from '../../services/auth.service';
+import { CardapioService } from '../../services/cardapio.service';
 
 @Component({
   selector: 'app-cardapio-admin',
