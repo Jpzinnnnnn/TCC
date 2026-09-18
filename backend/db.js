@@ -20,6 +20,7 @@ let pool = null;
 let senhaAtiva = SENHAS_PARA_TENTAR[0];
 
 async function encontrarConexaoValida() {
+  const erros = [];
   for (const senha of SENHAS_PARA_TENTAR) {
     try {
       const conexao = await mysql.createConnection({
@@ -34,10 +35,26 @@ async function encontrarConexaoValida() {
       console.log(`🔑 Conexão com MySQL estabelecida utilizando autenticação apropriada.`);
       return senha;
     } catch (err) {
-      // Tenta próxima senha
+      erros.push({ senha, erro: err.message, code: err.code });
+      if (err.code === 'ECONNREFUSED') {
+        // Se a porta está fechada / MySQL não está rodando, não adianta testar outras senhas
+        break;
+      }
     }
   }
-  throw new Error('Não foi possível autenticar no MySQL com as senhas conhecidas (root, 123456, vazia).');
+
+  const primeiroErro = erros[0];
+  if (primeiroErro && primeiroErro.code === 'ECONNREFUSED') {
+    throw new Error(
+      `Não foi possível conectar ao MySQL em ${DB_CONFIG.host}:${DB_CONFIG.port} (Conexão recusada / ECONNREFUSED).\n` +
+      `💡 Verifique se o serviço do MySQL ou o container Docker está ativo no seu computador.`
+    );
+  }
+
+  throw new Error(
+    `Não foi possível autenticar no MySQL (${DB_CONFIG.user}@${DB_CONFIG.host}:${DB_CONFIG.port}).\n` +
+    `💡 Defina a variável de ambiente DB_PASSWORD com a senha do MySQL (ex: DB_PASSWORD=suasenha npm start).`
+  );
 }
 
 async function initDb() {
@@ -309,9 +326,10 @@ async function semearDadosIniciais() {
     ];
 
     for (let d = 0; d < 5; d++) {
-      const dataDia = new Date(diaInicio);
-      dataDia.setDate(diaInicio.getDate() + d);
-      const dataStr = dataDia.toISOString().slice(0, 10);
+      const ano = dataDia.getFullYear();
+      const mes = String(dataDia.getMonth() + 1).padStart(2, '0');
+      const dia = String(dataDia.getDate()).padStart(2, '0');
+      const dataStr = `${ano}-${mes}-${dia}`;
 
       for (const item of cardapioExemplo) {
         const [resH] = await pool.query(

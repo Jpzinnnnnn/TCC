@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 app.post('/login', async (req, res) => {
   console.log('📥 Tentativa de login:', req.body?.email);
 
-  const { email, senha } = req.body;
+  const { email, senha } = req.body || {};
 
   if (!email || !senha) {
     return res.status(400).json({
@@ -173,34 +173,7 @@ app.post('/cardapio/opcoes', async (req, res) => {
   }
 });
 
-// GET - Buscar cardápio por data (ex: /cardapio/2026-09-18)
-app.get('/cardapio/:dia', async (req, res) => {
-  const { dia } = req.params;
-
-  try {
-    const [results] = await db.query(`
-      SELECT
-        c.id_cardapio,
-        c.comida,
-        c.fk_id_horario,
-        h.id_horario,
-        h.hora,
-        h.dia
-      FROM Cardapio c
-      INNER JOIN Horario h
-        ON c.fk_id_horario = h.id_horario
-      WHERE h.dia = ?
-      ORDER BY h.hora ASC, c.id_cardapio ASC
-    `, [dia]);
-
-    return res.status(200).json(results);
-  } catch (err) {
-    console.error('❌ Erro ao buscar cardápio por data:', err);
-    return res.status(500).json({ mensagem: 'Erro ao buscar cardápio.' });
-  }
-});
-
-// GET - Buscar item específico por ID
+// GET - Buscar item específico por ID (registrado antes de /:dia para evitar colisão)
 app.get('/cardapio/id/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -227,6 +200,33 @@ app.get('/cardapio/id/:id', async (req, res) => {
   } catch (err) {
     console.error('❌ Erro ao buscar item do cardápio:', err);
     return res.status(500).json({ mensagem: 'Erro ao buscar item do cardápio.' });
+  }
+});
+
+// GET - Buscar cardápio por data (ex: /cardapio/2026-09-18)
+app.get('/cardapio/:dia', async (req, res) => {
+  const { dia } = req.params;
+
+  try {
+    const [results] = await db.query(`
+      SELECT
+        c.id_cardapio,
+        c.comida,
+        c.fk_id_horario,
+        h.id_horario,
+        h.hora,
+        h.dia
+      FROM Cardapio c
+      INNER JOIN Horario h
+        ON c.fk_id_horario = h.id_horario
+      WHERE h.dia = ?
+      ORDER BY h.hora ASC, c.id_cardapio ASC
+    `, [dia]);
+
+    return res.status(200).json(results);
+  } catch (err) {
+    console.error('❌ Erro ao buscar cardápio por data:', err);
+    return res.status(500).json({ mensagem: 'Erro ao buscar cardápio.' });
   }
 });
 
@@ -755,6 +755,27 @@ app.delete('/eventos/:id', async (req, res) => {
 });
 
 
+// Middleware de tratamento de rotas não encontradas
+app.use((req, res) => {
+  res.status(404).json({
+    sucesso: false,
+    mensagem: `Rota [${req.method}] ${req.url} não encontrada.`
+  });
+});
+
+// Middleware global para captura de exceções
+app.use((err, req, res, next) => {
+  console.error('❌ Erro capturado no Express:', err);
+  if (res.headersSent) {
+    return next(err);
+  }
+  return res.status(err.status || 500).json({
+    sucesso: false,
+    mensagem: err.message || 'Erro interno no servidor.'
+  });
+});
+
+
 // =====================================================
 // INICIAR SERVIDOR
 // =====================================================
@@ -765,14 +786,24 @@ async function startServer() {
   try {
     await db.initDb();
 
-    app.listen(PORTA, () => {
+    const server = app.listen(PORTA, () => {
       console.log('======================================');
       console.log('🚀 Backend Monsenhor Bicudo Conectado!');
       console.log(`🌐 Servidor ativo em: http://localhost:${PORTA}`);
       console.log('======================================');
     });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`\n❌ ERRO: A porta ${PORTA} já está em uso por outro processo!`);
+        console.error(`💡 Dica: Finalize o processo anterior que está utilizando a porta ${PORTA} ou inicie em outra porta (ex: PORT=3001 node server.js).\n`);
+      } else {
+        console.error('❌ Erro ao iniciar servidor HTTP:', err);
+      }
+      process.exit(1);
+    });
   } catch (err) {
-    console.error('❌ Falha crítica ao inicializar o servidor:', err);
+    console.error('❌ Falha crítica ao inicializar o servidor:', err.message || err);
     process.exit(1);
   }
 }
